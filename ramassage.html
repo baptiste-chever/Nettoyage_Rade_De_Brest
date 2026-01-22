@@ -108,9 +108,6 @@
               <label>Votre nom<input type="text" id="nom-inscrit" required /></label>
               <button type="submit">S'inscrire au ramassage</button>
             </form>
-            <div class="photo-preview">
-              <img src="https://via.placeholder.com/350x200.png?text=Photo+Ramassage" alt="Photo du lieu">
-            </div>
           </div>
         `;
         const form = document.getElementById('inscription-form');
@@ -147,7 +144,11 @@
         })
       }).addTo(map);
 
-      // Formulaire à droite pour créer ramassage + photo
+      infoSection.innerHTML = `
+          <div class="photo-preview"> 
+          `;
+
+      // Formulaire à droite pour créer ramassage
       infoSection.innerHTML = `
         <div class="card">
           <h3>Créer un nouveau ramassage</h3>
@@ -157,9 +158,6 @@
             <label>Heure<input type="time" id="heure" required /></label>
             <button type="submit">Enregistrer le ramassage</button>
           </form>
-          <div class="photo-preview">
-            <img src="https://via.placeholder.com/350x200.png?text=Photo+Ramassage" alt="Photo du nouveau lieu">
-          </div>
         </div>
       `;
 
