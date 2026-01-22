@@ -52,7 +52,7 @@
     <div id="info-section"></div>
   </main>
 
-  <footer style="text-align:center; padding:1rem; background:#f5f5f5; margin-top:2rem;">
+  <footer>
     <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
   </footer>
 
@@ -78,7 +78,7 @@
     // Création des markers pour les ramassages existants
     ramassages.forEach(r => {
       const marker = L.marker([r.lat, r.lng]).addTo(map);
-      marker.bindPopup(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}`);
+      marker.bindPopup(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>Nombre d'inscrits : ${r.nb}`);
 
       marker.on('click', () => {
         // Affiche le détail sous la carte
@@ -87,6 +87,7 @@
             <h3>${r.lieu}</h3>
             <p><strong>Date :</strong> ${r.date}</p>
             <p><strong>Heure :</strong> ${r.heure}</p>
+            <p><strong>Nombre d'inscrits:</strong> ${r.nb}</p>
             <button id="inscrire-btn">S'inscrire au ramassage</button>
           </div>
         `;
