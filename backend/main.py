@@ -109,3 +109,7 @@ def delete_report(report_id: int):
             os.remove(path)
 
     return {"ok": True}
+
+@app.get("/")
+def root():
+    return {"api": "ok", "routes": ["/reports", "/uploads", "/docs"]}
