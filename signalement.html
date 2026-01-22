@@ -159,13 +159,60 @@ document.querySelectorAll(".card.report").forEach(enableDelete);
 /* ======================
    Ajout signalement
 ====================== */
-const form = document.getElementById("reportForm");
+const API = "http://127.0.0.1:8000";
 const list = document.getElementById("reportList");
+const form = document.getElementById("reportForm");
 
-form.addEventListener("submit", e => {
+function renderCard(r) {
+  const card = document.createElement("div");
+  card.className = "card report";
+
+  card.innerHTML = `
+    <div class="report-top">
+      <h3>${r.type}</h3>
+      <span class="badge pending">En attente</span>
+    </div>
+
+    <div class="meta">
+      <span class="chip">📍 ${Number(r.lat).toFixed(5)}, ${Number(r.lon).toFixed(5)}</span>
+      <span class="chip subtle">🗓️ Persistant</span>
+    </div>
+
+    <p class="report-desc">${r.description}</p>
+
+    <div class="report-photo">
+      ${r.photo_url
+        ? `<img class="photo" src="${API}${r.photo_url}" alt="Photo du déchet">`
+        : `<div class="photo-placeholder">📷 Aucune photo</div>`
+      }
+    </div>
+
+    <div class="card-actions">
+      <button class="btn-secondary danger" type="button">Supprimer</button>
+    </div>
+  `;
+
+  card.querySelector(".btn-secondary.danger").onclick = async () => {
+    await fetch(`${API}/reports/${r.id}`, { method: "DELETE" });
+    await loadReports();
+  };
+
+  return card;
+}
+
+async function loadReports() {
+  const res = await fetch(`${API}/reports`);
+  const reports = await res.json();
+  list.innerHTML = "";
+  reports.forEach(r => list.appendChild(renderCard(r)));
+}
+
+// Submit -> POST /reports (FormData)
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
   if (!currentCoords) {
-    alert("Clique sur la carte.");
+    alert("Clique sur la carte pour choisir une position.");
     return;
   }
 
@@ -173,42 +220,28 @@ form.addEventListener("submit", e => {
   const desc = document.getElementById("desc").value;
   const file = document.getElementById("photo").files[0];
 
-  const card = document.createElement("div");
-  card.className = "card report";
-  card.innerHTML = `
-    <div class="report-top">
-      <h3>${type}</h3>
-      <span class="badge pending">En attente</span>
-    </div>
-    <p class="report-desc">${desc}</p>
-    <div class="report-photo">
-      <div class="photo-placeholder">📷 Aucune photo</div>
-    </div>
-    <div class="card-actions">
-      <button class="btn-secondary danger" type="button">Supprimer</button>
-    </div>
-  `;
+  const fd = new FormData();
+  fd.append("type", type);
+  fd.append("description", desc);
+  fd.append("lat", currentCoords.lat);
+  fd.append("lon", currentCoords.lon);
+  if (file) fd.append("photo", file);
 
-  // photo
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      card.querySelector(".report-photo").innerHTML =
-        `<img class="photo" src="${reader.result}" alt="Photo du déchet">`;
-    };
-    reader.readAsDataURL(file);
+  const res = await fetch(`${API}/reports`, { method: "POST", body: fd });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    alert(err.detail || "Erreur upload");
+    return;
   }
-
-  list.prepend(card);
-  enableDelete(card);
 
   form.reset();
   coordsEl.textContent = "Coordonnées : non définies";
   if (marker) marker.remove();
   marker = null;
   currentCoords = null;
-});
-</script>
 
-</body>
-</html>
+  await loadReports();
+});
+
+// Chargement initial (affiche ce qui est en DB)
+loadReports();
