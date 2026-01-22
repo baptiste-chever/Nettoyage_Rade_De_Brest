@@ -21,7 +21,7 @@ body {
 header {
     background: linear-gradient(120deg, var(--primary), var(--secondary));
     color: white;
-    padding: 2rem 2rem;
+    padding: 1rem 2rem;
     text-align: center;
 }
 
@@ -50,18 +50,19 @@ header p {
     transition: 0.3s ease;
 }
 
-.btn-primary {
-    background-color: white;
-    color: var(--primary);
-}
 
 .btn-secondary {
     border: 2px solid white;
     color: white;
 }
 
-.btn-primary:hover {
-    background-color: #e3f2fd;
+html {
+    scroll-behavior: smooth;
+}
+
+#impact-collectif {
+    /* Cette valeur définit l'espace "de sécurité" au-dessus de la section lors du défilement */
+    scroll-margin-top: 100px; 
 }
 
 .btn-secondary:hover {
