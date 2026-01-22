@@ -19,3 +19,98 @@ Onglet signalement :
 - Ajout de photos
 - Message qui explique pourquoi le ramassage est complexe
 - Possibilité pour les bénévoles de supprimer la demande si ça a été ramassé
+
+
+
+Backlog réparti en sprints
+Projet : Zero Déchets en Rade
+
+Sprint 1 – MVP : découverte et navigation
+Objectif du sprint : permettre aux utilisateurs de comprendre le projet et de découvrir les actions existantes.
+
+User stories réalisées :
+
+US1
+En tant qu’utilisateur,
+je veux accéder à une arborescence claire du site,
+afin de naviguer facilement entre les différentes fonctionnalités.
+
+US2
+En tant qu’habitant local,
+je veux voir une présentation de l’organisation,
+afin de comprendre sa mission et ses objectifs.
+
+US4
+En tant qu’utilisateur,
+je veux consulter les actualités liées aux actions de ramassage,
+afin de rester informé des initiatives en cours.
+
+US5
+En tant qu’utilisateur,
+je veux voir des statistiques de ramassage et d’impact écologique,
+afin de mesurer l’impact global des actions menées.
+
+Sprint 2 – Organisation des collectes
+Objectif du sprint : permettre aux ambassadeurs de créer des actions et aux bénévoles de s’y inscrire.
+
+User stories réalisées :
+
+US3
+En tant qu’ambassadeur bénévole,
+je veux accéder rapidement à la création d’un ramassage depuis l’accueil,
+afin de lancer une action facilement.
+
+US6
+En tant qu’ambassadeur bénévole,
+je veux créer une collecte sur une carte,
+afin de localiser précisément la zone à nettoyer.
+
+US7
+En tant qu’ambassadeur bénévole,
+je veux choisir une date et une heure pour la collecte,
+afin d’organiser l’événement.
+
+US8
+En tant que ramasseur bénévole,
+je veux m’inscrire à une collecte,
+afin de participer à une action de ramassage.
+
+Sprint 3 – Signalement et participation citoyenne
+Objectif du sprint : permettre aux habitants de signaler des déchets et aux bénévoles de traiter ces signalements.
+
+User stories réalisées :
+
+US9
+En tant qu’habitant local,
+je veux signaler des objets encombrants sur une carte,
+afin d’alerter la communauté d’un besoin de ramassage.
+
+US10
+En tant qu’habitant local,
+je veux ajouter des photos à un signalement,
+afin de mieux décrire la situation.
+
+US11
+En tant qu’utilisateur,
+je veux voir un message expliquant pourquoi certains ramassages sont complexes,
+afin de comprendre les contraintes environnementales ou logistiques.
+
+Sprint 4 – Finalisation et suivi des actions
+Objectif du sprint : assurer le suivi des signalements et améliorer la lisibilité du projet.
+
+User stories réalisées :
+
+US12
+En tant que ramasseur bénévole,
+je veux marquer un signalement comme traité,
+afin d’indiquer que l’objet a été ramassé.
+
+US13
+En tant qu’utilisateur,
+je veux consulter l’historique des collectes réalisées,
+afin de visualiser les actions passées.
+
+US14
+En tant qu’utilisateur,
+je veux voir une mise à jour des statistiques après chaque collecte,
+afin de suivre l’évolution de l’impact environnemental.

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Créer un ramassage – Zéro Déchets en Rade</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="index.html">Zéro Déchets en Rade</a>
+      <nav class="nav-links" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a class="active" href="ramassage.html">Collecte</a>
+        <a href="signalement.html">Signalement</a>
+      </nav>
+    </div>
+    <h1>Créer un nouveau ramassage</h1>
+    <p>Vérifiez l’emplacement et renseignez les informations demandées.</p>
+  </header>
+
+  <main>
+    <div id="map"></div>
+
+    <form id="ramassageForm">
+      <label>
+        Nom du lieu
+        <input type="text" id="lieu" required />
+      </label>
+      <label>
+        Date
+        <input type="date" id="date" required />
+      </label>
+      <label>
+        Heure
+        <input type="time" id="heure" required />
+      </label>
+      <button type="submit">Enregistrer le ramassage</button>
+    </form>
+  </main>
+
+  <footer style="text-align:center; padding:1rem; background:#f5f5f5; margin-top:2rem;">
+    <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Récupération des coordonnées depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const lat = parseFloat(urlParams.get('lat'));
+    const lng = parseFloat(urlParams.get('lng'));
+
+    // Initialisation de la carte centrée sur le point cliqué
+    const map = L.map('map').setView([lat, lng], 14);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Marker sur le lieu
+    const marker = L.marker([lat, lng]).addTo(map)
+      .bindPopup("Nouvelle localisation")
+      .openPopup();
+
+    // Formulaire
+    const form = document.getElementById('ramassageForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const lieu = document.getElementById('lieu').value.trim();
+      const date = document.getElementById('date').value;
+      const heure = document.getElementById('heure').value;
+
+      if (!lieu || !date || !heure) {
+        alert("Veuillez remplir tous les champs.");
+        return;
+      }
+
+      // Ici tu peux enregistrer le ramassage dans ton backend ou localStorage
+      alert(`Ramassage enregistré !\nLieu: ${lieu}\nDate: ${date}\nHeure: ${heure}\nLatitude: ${lat}\nLongitude: ${lng}`);
+
+      // Optionnel : redirection vers la carte principale
+      window.location.href = 'ramassage.html';
+    });
+  </script>
+</body>
+</html>
