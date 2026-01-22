@@ -5,330 +5,202 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Zéro Déchets en Rade – Signalement</title>
 
-  <!-- Inter (optionnel) -->
+  <!-- Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""
-  />
+  <!-- Leaflet -->
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""/>
 
-  <!-- Ton CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-  <header>
-    <div class="nav">
-      <a class="brand" href="index.html">Zéro Déchets en Rade</a>
-      <nav class="nav-links" aria-label="Navigation principale">
-        <a href="index.html">Accueil</a>
-        <a href="ramassage.html">Collecte</a>
-        <a class="active" href="signalement.html">Signalement</a>
-      </nav>
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">Zéro Déchets en Rade</a>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="ramassage.html">Collecte</a>
+      <a class="active" href="signalement.html">Signalement</a>
+    </nav>
+  </div>
+
+  <h1>Signalement</h1>
+  <p>
+    Déclarez un objet encombrant ou une zone difficile à traiter afin de faciliter
+    l’organisation des actions de ramassage.
+  </p>
+
+  <div class="cta-buttons">
+    <a class="btn-primary" href="#declarer">Déclarer</a>
+    <a class="btn-secondary" href="#liste">Voir les signalements</a>
+  </div>
+</header>
+
+<section id="declarer">
+  <h2 style="text-align:center; margin-bottom:2rem;">Déclarer un encombrant</h2>
+
+  <div class="features">
+    <!-- Carte -->
+    <div class="card">
+      <h3>Localisation</h3>
+      <p>Clique sur la carte pour placer un marqueur.</p>
+      <div id="map" class="leaflet-map"></div>
+      <p id="coords" class="coords">Coordonnées : non définies</p>
     </div>
 
-    <h1>Signalement</h1>
-    <p>
-      Déclarez un objet encombrant ou une zone difficile à traiter. Ces signalements aident à organiser
-      des actions adaptées (matériel, sécurité, autorisations, logistique).
-    </p>
+    <!-- Form -->
+    <div class="card">
+      <h3>Détails</h3>
 
-    <div class="cta-buttons">
-      <a class="btn-primary" href="#declarer">Déclarer un encombrant</a>
-      <a class="btn-secondary" href="#liste">Voir les signalements</a>
+      <form id="reportForm" class="form">
+        <label>Type
+          <select id="type" required>
+            <option value="" disabled selected>Choisir…</option>
+            <option>Encombrant</option>
+            <option>Déchets dangereux</option>
+            <option>Déchets piégés</option>
+            <option>Autre</option>
+          </select>
+        </label>
+
+        <label>Description
+          <textarea id="desc" rows="4" required></textarea>
+        </label>
+
+        <label>Photo (optionnel)
+          <input type="file" id="photo" accept="image/*">
+        </label>
+
+        <div id="preview"></div>
+
+        <button class="btn-primary btn-block" type="submit">Publier</button>
+      </form>
     </div>
-  </header>
+  </div>
+</section>
 
-  <section id="info">
-    <div class="impact" style="text-align:left;">
-      <h2>Pourquoi le ramassage est parfois complexe ?</h2>
-      <p style="margin-top: 0.8rem;">
-        Certains déchets sont volumineux, lourds, dangereux (verre, métal, huiles), ou situés dans des zones
-        difficiles d’accès (rochers, pentes, marées). Un signalement permet d’anticiper :
-      </p>
-      <ul style="margin-left: 1.2rem; margin-top: 1rem;">
-        <li>Le besoin de matériel (gants épais, pinces, sacs renforcés, remorque…)</li>
-        <li>Le nombre de bénévoles nécessaire</li>
-        <li>La sécurité (marée, zones glissantes, objets coupants)</li>
-        <li>La coordination avec une collectivité / un service de collecte</li>
-      </ul>
+<section id="liste">
+  <h2 style="text-align:center; margin-bottom:2rem;">Signalements</h2>
+  <div class="features" id="reportList"></div>
+</section>
+
+<footer>
+  <p>© Zéro Déchets en Rade — Projet étudiant ISEN</p>
+</footer>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+/* ======================
+   Carte Leaflet
+====================== */
+const map = L.map("map").setView([48.39, -4.48], 12);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19
+}).addTo(map);
+
+let marker = null;
+let currentCoords = null;
+const coordsEl = document.getElementById("coords");
+
+map.on("click", e => {
+  const {lat, lng} = e.latlng;
+  currentCoords = {lat: lat.toFixed(5), lon: lng.toFixed(5)};
+  if (marker) marker.remove();
+  marker = L.marker([lat, lng]).addTo(map);
+  coordsEl.textContent = `Coordonnées : ${currentCoords.lat}, ${currentCoords.lon}`;
+});
+
+/* ======================
+   Preview photo
+====================== */
+const photoInput = document.getElementById("photo");
+const previewEl = document.getElementById("preview");
+
+photoInput.addEventListener("change", () => {
+  previewEl.innerHTML = "";
+  const file = photoInput.files[0];
+  if (!file) return;
+  const img = document.createElement("img");
+  img.className = "photo";
+  const reader = new FileReader();
+  reader.onload = () => img.src = reader.result;
+  reader.readAsDataURL(file);
+  previewEl.appendChild(img);
+});
+
+/* ======================
+   Ajout signalement
+====================== */
+const form = document.getElementById("reportForm");
+const list = document.getElementById("reportList");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  if (!currentCoords) {
+    alert("Clique sur la carte pour choisir une position.");
+    return;
+  }
+
+  const type = document.getElementById("type").value;
+  const desc = document.getElementById("desc").value;
+
+  const card = document.createElement("div");
+  card.className = "card report";
+
+  card.innerHTML = `
+    <div class="report-top">
+      <h3>${type}</h3>
+      <span class="badge pending">En attente</span>
     </div>
-  </section>
-
-  <section id="declarer">
-    <h2 style="text-align:center; margin-bottom: 2rem;">Déclarer un encombrant</h2>
-
-    <div class="features">
-      <!-- Carte -->
-      <div class="card" style="text-align:left;">
-        <h3>1) Localisation sur la carte</h3>
-        <p>Clique sur la carte pour placer un marqueur et enregistrer la position.</p>
-
-        <div id="map" class="leaflet-map" aria-label="Carte de signalement"></div>
-
-        <p id="coords" style="opacity:0.8; margin-top: 0.6rem;">
-          Coordonnées : non définies
-        </p>
-        <small style="opacity:0.8;">
-          Astuce : zoom + déplacement possibles.
-        </small>
-      </div>
-
-      <!-- Formulaire -->
-      <div class="card" style="text-align:left;">
-        <h3>2) Détails</h3>
-
-        <form id="reportForm" class="form">
-          <label>
-            Type d’objet / zone
-            <select id="type" required>
-              <option value="" selected disabled>Choisir…</option>
-              <option>Encombrant (meuble, gros plastique)</option>
-              <option>Déchets dangereux (verre/métal/produits)</option>
-              <option>Déchets piégés (rochers, vase, falaise)</option>
-              <option>Autre</option>
-            </select>
-          </label>
-
-          <label>
-            Description (utile pour comprendre la complexité)
-            <textarea id="desc" rows="4" placeholder="Ex : gros pneu coincé entre les rochers, accès à marée basse..." required></textarea>
-          </label>
-
-          <label>
-            Ajouter une photo (optionnel)
-            <input id="photo" type="file" accept="image/*" />
-            <small style="opacity:0.8;">Démo : l’image est seulement prévisualisée, pas envoyée.</small>
-          </label>
-
-          <div id="preview" class="photo-preview" aria-live="polite"></div>
-
-          <button type="submit" class="btn-primary btn-block">Publier le signalement</button>
-        </form>
-      </div>
+    <div class="meta">
+      <span class="chip">📍 ${currentCoords.lat}, ${currentCoords.lon}</span>
+      <span class="chip subtle">🗓️ À l’instant</span>
     </div>
-  </section>
-
-  <section id="liste">
-    <h2 style="text-align:center; margin-bottom: 2rem;">Signalements</h2>
-  
-    <!-- Conteneur qui recevra les cards (et sert au JS) -->
-    <div class="features" id="reportList">
-  
-      <div class="card report">
-        <div class="report-top">
-          <h3 class="report-title">Pneu + ferraille</h3>
-          <span class="badge pending">En attente</span>
-        </div>
-  
-        <div class="meta">
-          <span class="chip">📍 Plouzané</span>
-          <span class="chip subtle">🗓️ Signalé aujourd’hui</span>
-        </div>
-  
-        <p class="report-desc">
-          Déchets coincés entre les rochers, accès limité à marée basse.
-        </p>
-  
-        <div class="report-photo">
-          <div class="photo-placeholder">
-            <span>📷</span>
-            <small>Aucune photo</small>
-          </div>
-        </div>
-  
-        <div class="card-actions">
-          <button class="btn-primary" type="button">Marquer comme ramassé</button>
-          <button class="btn-secondary danger" type="button">Supprimer</button>
-        </div>
-      </div>
-  
-      <div class="card report">
-        <div class="report-top">
-          <h3 class="report-title">Déchet humain</h3>
-          <span class="badge done">Cuit complet</span>
-        </div>
-  
-        <div class="meta">
-          <span class="chip">📍 Bukit Bintang</span>
-          <span class="chip subtle">🗓️ Signalé hier</span>
-        </div>
-  
-        <p class="report-desc">
-          Fin de dry january pour Baptiste.
-        </p>
-  
-        <div class="report-photo">
-          <div class="photo-placeholder">
-            <span>📷</span>
-            <small>Aucune photo</small>
-          </div>
-        </div>
-  
-        <div class="card-actions">
-          <button class="btn-primary" type="button">Marquer comme ramassé</button>
-          <button class="btn-secondary danger" type="button">Supprimer</button>
-        </div>
-      </div>
-  
+    <p class="report-desc">${desc}</p>
+    <div class="report-photo">
+      <div class="photo-placeholder">📷 Aucune photo</div>
     </div>
-  </section>
+    <div class="card-actions">
+      <button class="btn-primary">Marquer comme ramassé</button>
+      <button class="btn-secondary danger">Supprimer</button>
+    </div>
+  `;
 
-  <footer>
-    <p>© Zéro Déchets en Rade — Projet étudiant (ISEN) · Signalement</p>
-  </footer>
+  // actions
+  const badge = card.querySelector(".badge");
+  card.querySelector(".btn-primary").onclick = () => {
+    badge.textContent = "Ramassé ✅";
+    badge.classList.replace("pending", "done");
+  };
+  card.querySelector(".btn-secondary").onclick = () => card.remove();
 
-  <!-- Leaflet JS (à mettre avant ton script) -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
+  // photo
+  const file = photoInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      card.querySelector(".report-photo").innerHTML =
+        `<img class="photo" src="${reader.result}">`;
+    };
+    reader.readAsDataURL(file);
+  }
 
-  <script>
-    // ----------------------------
-    // 1) Carte Leaflet
-    // ----------------------------
-    const map = L.map("map").setView([48.3904, -4.4861], 12); // Brest approx
+  list.prepend(card);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap'
-    }).addTo(map);
-
-    let marker = null;
-    let currentCoords = null;
-
-    const coordsEl = document.getElementById("coords");
-
-    map.on("click", (e) => {
-      const { lat, lng } = e.latlng;
-      currentCoords = { lat: lat.toFixed(5), lon: lng.toFixed(5) };
-
-      if (marker) marker.remove();
-      marker = L.marker([lat, lng]).addTo(map);
-
-      coordsEl.textContent = `Coordonnées : ${currentCoords.lat}, ${currentCoords.lon}`;
-    });
-
-    // ----------------------------
-    // 2) Preview photo
-    // ----------------------------
-    const photoInput = document.getElementById("photo");
-    const previewEl = document.getElementById("preview");
-
-    photoInput.addEventListener("change", () => {
-      previewEl.innerHTML = "";
-      const file = photoInput.files?.[0];
-      if (!file) return;
-
-      const img = document.createElement("img");
-      img.alt = "Prévisualisation de la photo";
-      img.className = "photo";
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        img.src = reader.result;
-        previewEl.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
-
-    // ----------------------------
-    // 3) Ajout de signalements (démo)
-    // ----------------------------
-    const form = document.getElementById("reportForm");
-    const list = document.getElementById("reportList");
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const type = document.getElementById("type").value;
-      const desc = document.getElementById("desc").value.trim();
-
-      if (!currentCoords) {
-        alert("Veuillez cliquer sur la carte pour sélectionner une localisation.");
-        return;
-      }
-
-      const card = document.createElement("div");
-      card.className = "card";
-      card.style.textAlign = "left";
-
-      const title = document.createElement("h3");
-      title.textContent = type;
-
-      const status = document.createElement("p");
-      status.innerHTML = "<strong>Statut :</strong> En attente";
-
-      const loc = document.createElement("p");
-      loc.innerHTML = `<strong>Localisation :</strong> ${currentCoords.lat}, ${currentCoords.lon}`;
-
-      const d = document.createElement("p");
-      d.style.marginTop = "0.8rem";
-      d.style.opacity = "0.9";
-      d.textContent = desc;
-
-      const actions = document.createElement("div");
-      actions.className = "card-actions";
-
-      const doneBtn = document.createElement("button");
-      doneBtn.type = "button";
-      doneBtn.className = "btn-primary";
-      doneBtn.textContent = "Marquer comme ramassé";
-      doneBtn.addEventListener("click", () => {
-        status.innerHTML = "<strong>Statut :</strong> Ramassé ✅";
-      });
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.type = "button";
-      deleteBtn.className = "btn-secondary danger";
-      deleteBtn.textContent = "Supprimer";
-      deleteBtn.addEventListener("click", () => {
-        card.remove();
-      });
-
-      actions.appendChild(doneBtn);
-      actions.appendChild(deleteBtn);
-
-      card.appendChild(title);
-      card.appendChild(status);
-      card.appendChild(loc);
-      card.appendChild(d);
-      card.appendChild(actions);
-
-      // Photo dans la card si fournie
-      const file = photoInput.files?.[0];
-      if (file) {
-        const img = document.createElement("img");
-        img.className = "photo";
-        img.alt = "Photo du signalement";
-        const reader = new FileReader();
-        reader.onload = () => {
-          img.src = reader.result;
-          img.style.marginTop = "0.8rem";
-          card.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-
-      list.prepend(card);
-
-      // Reset
-      form.reset();
-      previewEl.innerHTML = "";
-      currentCoords = null;
-      coordsEl.textContent = "Coordonnées : non définies";
-      if (marker) { marker.remove(); marker = null; }
-
-      alert("Signalement publié (démo) !");
-    });
-  </script>
+  form.reset();
+  previewEl.innerHTML = "";
+  coordsEl.textContent = "Coordonnées : non définies";
+  if (marker) marker.remove();
+  marker = null;
+  currentCoords = null;
+});
+</script>
 </body>
 </html>
