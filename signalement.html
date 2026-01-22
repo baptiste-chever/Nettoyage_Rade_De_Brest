@@ -10,23 +10,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <!-- Leaflet CSS -->
   <link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-  crossorigin=""
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
   />
 
+  <!-- Ton CSS -->
   <link rel="stylesheet" href="css/style.css">
-
 </head>
-
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""
-></script>
-
 
 <body>
   <header>
@@ -71,18 +65,19 @@
     <h2 style="text-align:center; margin-bottom: 2rem;">Déclarer un encombrant</h2>
 
     <div class="features">
-      <!-- Carte (placeholder) -->
+      <!-- Carte -->
       <div class="card" style="text-align:left;">
         <h3>1) Localisation sur la carte</h3>
-        <p>Sélectionnez un point (ou renseignez une adresse). Une carte interactive pourra être ajoutée ensuite.</p>
+        <p>Clique sur la carte pour placer un marqueur et enregistrer la position.</p>
 
         <div id="map" class="leaflet-map" aria-label="Carte de signalement"></div>
-          <p id="coords" style="opacity:0.8; margin-top: 0.6rem;">
-            Coordonnées : non définies
-          </p>
-          <small style="opacity:0.8;">
-            Astuce : clique sur la carte pour placer un marqueur.
-          </small>
+
+        <p id="coords" style="opacity:0.8; margin-top: 0.6rem;">
+          Coordonnées : non définies
+        </p>
+        <small style="opacity:0.8;">
+          Astuce : zoom + déplacement possibles.
+        </small>
       </div>
 
       <!-- Formulaire -->
@@ -124,11 +119,11 @@
     <h2 style="text-align:center; margin-bottom: 2rem;">Signalements</h2>
 
     <div class="features" id="reportList">
-      <!-- Exemples de cards, remplacées par JS -->
+      <!-- Exemple -->
       <div class="card" style="text-align:left;">
         <h3>Pneu + ferraille (exemple)</h3>
         <p><strong>Statut :</strong> En attente</p>
-        <p><strong>Localisation :</strong> Plouzané (coordonnées simulées)</p>
+        <p><strong>Localisation :</strong> Plouzané (exemple)</p>
         <p style="margin-top: 0.8rem; opacity:0.9;">
           Déchets coincés entre les rochers, accès limité à marée basse.
         </p>
@@ -144,24 +139,42 @@
     <p>© Zéro Déchets en Rade — Projet étudiant (ISEN) · Signalement</p>
   </footer>
 
-  <script>
-    // ---- Démo simple (sans backend) : on ajoute des signalements dans la page ----
+  <!-- Leaflet JS (à mettre avant ton script) -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
 
-    // Coordonnées simulées (cliquer dans la "carte")
+  <script>
+    // ----------------------------
+    // 1) Carte Leaflet
+    // ----------------------------
+    const map = L.map("map").setView([48.3904, -4.4861], 12); // Brest approx
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    let marker = null;
     let currentCoords = null;
 
-    const mapEl = document.getElementById("map");
     const coordsEl = document.getElementById("coords");
 
-    mapEl.addEventListener("click", () => {
-      // Simule un choix sur une carte : on "fabrique" des coords
-      const lat = (48.35 + Math.random() * 0.08).toFixed(5);
-      const lon = (-4.60 + Math.random() * 0.10).toFixed(5);
-      currentCoords = { lat, lon };
-      coordsEl.textContent = `Coordonnées : ${lat}, ${lon}`;
+    map.on("click", (e) => {
+      const { lat, lng } = e.latlng;
+      currentCoords = { lat: lat.toFixed(5), lon: lng.toFixed(5) };
+
+      if (marker) marker.remove();
+      marker = L.marker([lat, lng]).addTo(map);
+
+      coordsEl.textContent = `Coordonnées : ${currentCoords.lat}, ${currentCoords.lon}`;
     });
 
-    // Preview photo
+    // ----------------------------
+    // 2) Preview photo
+    // ----------------------------
     const photoInput = document.getElementById("photo");
     const previewEl = document.getElementById("preview");
 
@@ -182,7 +195,9 @@
       reader.readAsDataURL(file);
     });
 
-    // Ajout de signalement dans la liste
+    // ----------------------------
+    // 3) Ajout de signalements (démo)
+    // ----------------------------
     const form = document.getElementById("reportForm");
     const list = document.getElementById("reportList");
 
@@ -193,7 +208,7 @@
       const desc = document.getElementById("desc").value.trim();
 
       if (!currentCoords) {
-        alert("Veuillez sélectionner une localisation sur la carte (clic dans le bloc carte).");
+        alert("Veuillez cliquer sur la carte pour sélectionner une localisation.");
         return;
       }
 
@@ -243,7 +258,7 @@
       card.appendChild(d);
       card.appendChild(actions);
 
-      // Option : si une photo est chargée, on l’affiche dans la card
+      // Photo dans la card si fournie
       const file = photoInput.files?.[0];
       if (file) {
         const img = document.createElement("img");
@@ -258,7 +273,6 @@
         reader.readAsDataURL(file);
       }
 
-      // Ajout en haut de liste
       list.prepend(card);
 
       // Reset
@@ -266,6 +280,8 @@
       previewEl.innerHTML = "";
       currentCoords = null;
       coordsEl.textContent = "Coordonnées : non définies";
+      if (marker) { marker.remove(); marker = null; }
+
       alert("Signalement publié (démo) !");
     });
   </script>
