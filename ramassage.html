@@ -19,14 +19,11 @@
   />
   <link rel="stylesheet" href="css/style.css">
   <style>
-    body { font-family:'Inter', Arial, sans-serif; margin:0; padding:0; }
-    
     main { padding:1rem 2rem; }
+    footer { text-align:center; padding:1rem; background:#f5f5f5; margin-top:2rem; }
 
-    /* Conteneur flex pour carte + infos */
     #map-container {
       display: flex;
-      flex-direction: row;
       gap: 1rem;
     }
 
@@ -41,13 +38,53 @@
       max-width: 400px;
     }
 
-    .card { background:#f5f5f5; padding:1rem; border-radius:5px; margin-bottom:1rem; }
-    form { display:flex; flex-direction:column; gap:1rem; }
-    label { display:flex; flex-direction:column; margin-bottom:0.5rem; }
-    input, button { padding:0.5rem; font-size:1rem; }
-    button { background:#007BFF; color:white; border:none; cursor:pointer; border-radius:5px; }
-    .photo-preview img { width:100%; max-height:200px; object-fit:cover; border-radius:5px; }
-    .inscrits { margin-top:0.5rem; font-size:0.9rem; color:#555; }
+    .card {
+      background:#f5f5f5;
+      padding:1rem;
+      border-radius:5px;
+    }
+
+    .photo-preview img {
+      width:100%;
+      border-radius:5px;
+      object-fit:cover;
+      max-height:350px;
+    }
+
+    form {
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+      margin-top:1rem;
+    }
+
+    label {
+      display:flex;
+      flex-direction:column;
+      font-weight:600;
+    }
+
+    input {
+      padding:0.5rem;
+      margin-top:0.3rem;
+      font-size:1rem;
+    }
+
+    button {
+      padding:0.6rem;
+      background:#007BFF;
+      color:white;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      font-size:1rem;
+    }
+
+    .inscrits {
+      font-size:0.9rem;
+      color:#555;
+      margin-top:0.5rem;
+    }
   </style>
 </head>
 
@@ -66,130 +103,141 @@
   </header>
 
   <main>
-    <div id="map-container">
-      <div id="map" aria-label="Carte des ramassages"></div>
-      <div id="info-section"></div>
+  <div id="map-container">
+    <div id="map"></div>
+
+    <div id="info-section">
+      <div class="photo-preview">
+        <img src="figures/sacs_plastiques.jpg" alt="Déchets sur la plage">
+      </div>
     </div>
-  </main>
+  </div>
+</main>
 
-  <footer>
-    <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
-  </footer>
+<footer>
+  <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
+</footer>
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script>
-    const map = L.map("map").setView([48.3904, -4.4861], 11);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap",
-      maxZoom: 19
-    }).addTo(map);
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    const infoSection = document.getElementById('info-section');
-    let tempMarker = null;
+<script>
+  const map = L.map("map").setView([48.3904, -4.4861], 11);
 
-    // Ramassages existants avec liste d'inscrits
-    const ramassages = [
-      { lieu: "Plage du Moulin Blanc", date: "22/01/2026", heure: "10:00", lat: 48.387, lng: -4.418, inscrits: [] },
-      { lieu: "Plage de Sainte-Anne", date: "25/01/2026", heure: "14:00", lat: 48.356, lng: -4.558, inscrits: [] }
-    ];
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap"
+  }).addTo(map);
 
-    // Fonction pour afficher le nombre d'inscrits
-    function inscritsText(r) {
-      return r.inscrits.length ? `${r.inscrits.length} inscrit(s)` : `Aucun inscrit`;
-    }
+  const infoSection = document.getElementById("info-section");
+  let tempMarker = null;
 
-    // Création des markers existants
-    ramassages.forEach(r => {
-      const marker = L.marker([r.lat, r.lng]).addTo(map);
-      marker.bindPopup(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>${inscritsText(r)}`);
+  function showPhoto() {
+    infoSection.innerHTML = `
+      <div class="photo-preview">
+        <img src="figures/sacs_plastiques.jpg" alt="Déchets sur la plage">
+      </div>
+    `;
+  }
 
-      marker.on('click', () => {
-        if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
+  function inscritsText(r) {
+    return r.inscrits.length
+      ? `${r.inscrits.length} inscrit(s)`
+      : "Aucun inscrit";
+  }
 
-        infoSection.innerHTML = `
-          <div class="card">
-            <h3>${r.lieu}</h3>
-            <p><strong>Date :</strong> ${r.date}</p>
-            <p><strong>Heure :</strong> ${r.heure}</p>
-            <p class="inscrits"><strong>Inscriptions :</strong> ${inscritsText(r)}</p>
-            <form id="inscription-form">
-              <label>Votre nom<input type="text" id="nom-inscrit" required /></label>
-              <button type="submit">S'inscrire au ramassage</button>
-            </form>
-          </div>
-        `;
-        const form = document.getElementById('inscription-form');
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const nom = document.getElementById('nom-inscrit').value.trim();
-          if (!nom) return alert("Veuillez entrer votre nom");
-          r.inscrits.push(nom);
-          alert("Merci ! Votre inscription est validée !");
-          // Mettre à jour la popup du marker
-          marker.setPopupContent(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>${inscritsText(r)}`);
-          // Réaffiche les infos avec nombre d'inscrits mis à jour
-          marker.fire('click');
-        });
-      });
-    });
+  const ramassages = [
+    { lieu:"Plage du Moulin Blanc", date:"22/01/2026", heure:"10:00", lat:48.387, lng:-4.418, inscrits:[] },
+    { lieu:"Plage de Sainte-Anne", date:"25/01/2026", heure:"14:00", lat:48.356, lng:-4.558, inscrits:[] }
+  ];
 
-    // Clique sur la carte pour créer un nouveau ramassage
-    map.on('click', (e) => {
-      const lat = e.latlng.lat.toFixed(5);
-      const lng = e.latlng.lng.toFixed(5);
+  ramassages.forEach(r => {
+    const marker = L.marker([r.lat, r.lng]).addTo(map);
+    marker.bindPopup(
+      `<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>${inscritsText(r)}`
+    );
 
-      const existing = ramassages.find(r => Math.abs(r.lat - lat) < 0.0001 && Math.abs(r.lng - lng) < 0.0001);
-      if (existing) return;
+    marker.on("click", () => {
+      if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
 
-      if (tempMarker) map.removeLayer(tempMarker);
-
-      // Marker rouge temporaire
-      tempMarker = L.marker([lat, lng], {
-        icon: L.icon({
-          iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-          iconSize: [32,32],
-          iconAnchor: [16,32]
-        })
-      }).addTo(map);
-
-      infoSection.innerHTML = `
-          <div class="photo-preview"> 
-            <img class="photo" src="figures/sacs_plastiques.jpg" alt="Déchet humain">
-          </div>
-          `;
-
-      // Formulaire à droite pour créer ramassage
       infoSection.innerHTML = `
         <div class="card">
-          <h3>Créer un nouveau ramassage</h3>
-          <form id="new-ramassage-form">
-            <label>Nom du lieu<input type="text" id="lieu" required /></label>
-            <label>Date<input type="date" id="date" required /></label>
-            <label>Heure<input type="time" id="heure" required /></label>
-            <button type="submit">Enregistrer le ramassage</button>
+          <h3>${r.lieu}</h3>
+          <p><strong>Date :</strong> ${r.date}</p>
+          <p><strong>Heure :</strong> ${r.heure}</p>
+          <p class="inscrits">${inscritsText(r)}</p>
+
+          <form id="inscription-form">
+            <label>Votre nom
+              <input type="text" id="nom" required>
+            </label>
+            <button>S'inscrire</button>
           </form>
         </div>
       `;
 
-      const form = document.getElementById('new-ramassage-form');
-      form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const lieu = document.getElementById('lieu').value.trim();
-        const date = document.getElementById('date').value;
-        const heure = document.getElementById('heure').value;
-
-        if (!lieu || !date || !heure) return alert("Veuillez remplir tous les champs");
-
-        // Ajouter le nouveau ramassage
-        const marker = L.marker([lat, lng]).addTo(map)
-          .bindPopup(`<strong>${lieu}</strong><br>Date : ${date}<br>Heure : ${heure}<br>Aucun inscrit`);
-        ramassages.push({ lieu, date, heure, lat, lng, inscrits: [] });
-
-        alert("Nouveau ramassage créé !");
-        infoSection.innerHTML = '';
-        if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
+      document.getElementById("inscription-form").addEventListener("submit", e => {
+        e.preventDefault();
+        r.inscrits.push(document.getElementById("nom").value);
+        alert("Merci ! Votre inscription est validée !");
+        marker.setPopupContent(
+          `<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>${inscritsText(r)}`
+        );
+        marker.fire("click");
       });
     });
-  </script>
+  });
+
+  map.on("click", e => {
+    if (tempMarker) map.removeLayer(tempMarker);
+
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+
+    tempMarker = L.marker([lat, lng], {
+      icon: L.icon({
+        iconUrl:"https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+        iconSize:[32,32],
+        iconAnchor:[16,32]
+      })
+    }).addTo(map);
+
+    infoSection.innerHTML = `
+      <div class="card">
+        <h3>Créer un ramassage</h3>
+        <form id="new-form">
+          <label>Nom du lieu
+            <input type="text" id="lieu" required>
+          </label>
+          <label>Date
+            <input type="date" id="date" required>
+          </label>
+          <label>Heure
+            <input type="time" id="heure" required>
+          </label>
+          <button>Créer</button>
+        </form>
+      </div>
+    `;
+
+    document.getElementById("new-form").addEventListener("submit", e => {
+      e.preventDefault();
+
+      const lieu = document.getElementById("lieu").value;
+      const date = document.getElementById("date").value;
+      const heure = document.getElementById("heure").value;
+
+      ramassages.push({ lieu, date, heure, lat, lng, inscrits:[] });
+
+      L.marker([lat, lng]).addTo(map)
+        .bindPopup(`<strong>${lieu}</strong><br>Date : ${date}<br>Heure : ${heure}<br>Aucun inscrit`);
+
+      alert("Ramassage créé !");
+      map.removeLayer(tempMarker);
+      tempMarker = null;
+      showPhoto();
+    });
+  });
+</script>
+
 </body>
 </html>
