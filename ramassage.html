@@ -87,13 +87,11 @@
     map.on("click", (e) => {
       const lat = e.latlng.lat.toFixed(5);
       const lng = e.latlng.lng.toFixed(5);
-
+    
       const confirmAdd = confirm(`Créer un ramassage à cet endroit ?\n\nLatitude : ${lat}\nLongitude : ${lng}`);
       if (confirmAdd) {
-        L.marker([lat, lng])
-          .addTo(map)
-          .bindPopup("<strong>Nouveau ramassage</strong><br>À compléter")
-          .openPopup();
+        // Redirige vers la page de création en passant lat/lng en query params
+        window.location.href = `creer-ramassage.html?lat=${lat}&lng=${lng}`;
       }
     });
   </script>
