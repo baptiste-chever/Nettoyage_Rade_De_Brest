@@ -90,10 +90,10 @@ En tant qu’habitant local,
 je veux ajouter des photos à un signalement,
 afin de mieux décrire la situation.
 
-US11 (on s'en fiche)
-En tant qu’utilisateur,
-je veux voir un message expliquant pourquoi certains ramassages sont complexes,
-afin de comprendre les contraintes environnementales ou logistiques.
+US11 
+En tant que ramasseur bénévole,
+je veux signaler un objectdont le ramassage est trop complexe avec les moyens disponibles actuellement,
+afin de les prendre en charge ultérieurement.
 
 Sprint 4 – Finalisation et suivi des actions
 Objectif du sprint : assurer le suivi des signalements et améliorer la lisibilité du projet.
@@ -101,16 +101,11 @@ Objectif du sprint : assurer le suivi des signalements et améliorer la lisibili
 User stories réalisées :
 
 US12
-En tant que ramasseur bénévole,
-je veux marquer un signalement comme traité,
-afin d’indiquer que l’objet a été ramassé.
-
-US13
 En tant qu’utilisateur,
-je veux consulter l’historique des collectes réalisées,
+je veux consulter l’historique des collectes réalisées en allant dans la page "voir les actions",
 afin de visualiser les actions passées.
 
-US14
+US13
 En tant qu’utilisateur,
 je veux voir une mise à jour des statistiques après chaque collecte,
 afin de suivre l’évolution de l’impact environnemental.
