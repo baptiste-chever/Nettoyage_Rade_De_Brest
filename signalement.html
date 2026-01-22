@@ -11,14 +11,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- Leaflet -->
-  <link rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
+  <!-- CSS -->
   <link rel="stylesheet" href="css/style_dinan.css">
 </head>
 
 <body>
+
 <header>
   <div class="nav">
     <a class="brand" href="index.html">Zéro Déchets en Rade</a>
@@ -30,14 +30,11 @@
   </div>
 
   <h1>Signalement</h1>
-  <p>
-    Déclarez un objet encombrant ou une zone difficile à traiter afin de faciliter
-    l’organisation des actions de ramassage.
-  </p>
+  <p>Déclarez un encombrant ou une zone difficile à traiter.</p>
 
   <div class="cta-buttons">
     <a class="btn-primary" href="#declarer">Déclarer</a>
-    <a class="btn-secondary" href="#liste">Voir les signalements</a>
+    <a class="btn-secondary" href="#liste">Voir</a>
   </div>
 </header>
 
@@ -45,15 +42,12 @@
   <h2 style="text-align:center; margin-bottom:2rem;">Déclarer un encombrant</h2>
 
   <div class="features">
-    <!-- Carte -->
     <div class="card">
       <h3>Localisation</h3>
-      <p>Clique sur la carte pour placer un marqueur.</p>
       <div id="map" class="leaflet-map"></div>
       <p id="coords" class="coords">Coordonnées : non définies</p>
     </div>
 
-    <!-- Form -->
     <div class="card">
       <h3>Détails</h3>
 
@@ -76,8 +70,6 @@
           <input type="file" id="photo" accept="image/*">
         </label>
 
-        <div id="preview"></div>
-
         <button class="btn-primary btn-block" type="submit">Publier</button>
       </form>
     </div>
@@ -86,63 +78,33 @@
 
 <section id="liste">
   <h2 style="text-align:center; margin-bottom:2rem;">Signalements</h2>
-    <div class="features" id="reportList">
-  
-    <!-- EXEMPLES (fixes) -->
+
+  <div class="features" id="reportList">
+
+    <!-- Exemples -->
     <div class="card report">
       <div class="report-top">
         <h3>Pneu + ferraille</h3>
         <span class="badge pending">En attente</span>
       </div>
-  
-      <div class="meta">
-        <span class="chip">📍 Plouzané</span>
-        <span class="chip subtle">🗓️ Signalé aujourd’hui</span>
-      </div>
-  
-      <p class="report-desc">
-        Déchets coincés entre les rochers, accès limité à marée basse.
-      </p>
-  
-      <div class="report-photo">
-        <div class="photo-placeholder">📷 Aucune photo</div>
-        <!-- ou une vraie image : -->
-        <!-- <img class="photo" src="img/pneu.jpg" alt="Photo du signalement"> -->
-      </div>
-  
+      <p class="report-desc">Déchets coincés entre les rochers.</p>
       <div class="card-actions">
-        <button class="btn-primary" type="button">Marquer comme ramassé</button>
         <button class="btn-secondary danger" type="button">Supprimer</button>
       </div>
     </div>
-  
+
     <div class="card report">
       <div class="report-top">
-        <h3>Filet de pêche + plastiques</h3>
+        <h3>Filet de pêche</h3>
         <span class="badge pending">En attente</span>
       </div>
-  
-      <div class="meta">
-        <span class="chip">📍 Le Conquet</span>
-        <span class="chip subtle">🗓️ Signalé hier</span>
-      </div>
-  
-      <p class="report-desc">
-        Filet coincé, extraction difficile sans matériel. Risque d’emmêlement.
-      </p>
-  
-      <div class="report-photo">
-        <div class="photo-placeholder">📷 Aucune photo</div>
-      </div>
-  
+      <p class="report-desc">Filet lourd, extraction compliquée.</p>
       <div class="card-actions">
-        <button class="btn-primary" type="button">Marquer comme ramassé</button>
         <button class="btn-secondary danger" type="button">Supprimer</button>
       </div>
     </div>
-  
-  </div>
 
+  </div>
 </section>
 
 <footer>
@@ -154,42 +116,34 @@
 
 <script>
 /* ======================
-   Carte Leaflet
+   Carte
 ====================== */
 const map = L.map("map").setView([48.39, -4.48], 12);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19
-}).addTo(map);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
 let marker = null;
 let currentCoords = null;
 const coordsEl = document.getElementById("coords");
 
 map.on("click", e => {
-  const {lat, lng} = e.latlng;
-  currentCoords = {lat: lat.toFixed(5), lon: lng.toFixed(5)};
+  currentCoords = {
+    lat: e.latlng.lat.toFixed(5),
+    lon: e.latlng.lng.toFixed(5)
+  };
   if (marker) marker.remove();
-  marker = L.marker([lat, lng]).addTo(map);
+  marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
   coordsEl.textContent = `Coordonnées : ${currentCoords.lat}, ${currentCoords.lon}`;
 });
 
 /* ======================
-   Preview photo
+   Suppression
 ====================== */
-const photoInput = document.getElementById("photo");
-const previewEl = document.getElementById("preview");
+function enableDelete(card) {
+  const btn = card.querySelector(".btn-secondary.danger");
+  if (btn) btn.onclick = () => card.remove();
+}
 
-photoInput.addEventListener("change", () => {
-  previewEl.innerHTML = "";
-  const file = photoInput.files[0];
-  if (!file) return;
-  const img = document.createElement("img");
-  img.className = "photo";
-  const reader = new FileReader();
-  reader.onload = () => img.src = reader.result;
-  reader.readAsDataURL(file);
-  previewEl.appendChild(img);
-});
+document.querySelectorAll(".card.report").forEach(enableDelete);
 
 /* ======================
    Ajout signalement
@@ -200,7 +154,7 @@ const list = document.getElementById("reportList");
 form.addEventListener("submit", e => {
   e.preventDefault();
   if (!currentCoords) {
-    alert("Clique sur la carte pour choisir une position.");
+    alert("Clique sur la carte.");
     return;
   }
 
@@ -209,54 +163,27 @@ form.addEventListener("submit", e => {
 
   const card = document.createElement("div");
   card.className = "card report";
-
   card.innerHTML = `
     <div class="report-top">
       <h3>${type}</h3>
       <span class="badge pending">En attente</span>
     </div>
-    <div class="meta">
-      <span class="chip">📍 ${currentCoords.lat}, ${currentCoords.lon}</span>
-      <span class="chip subtle">🗓️ À l’instant</span>
-    </div>
     <p class="report-desc">${desc}</p>
-    <div class="report-photo">
-      <div class="photo-placeholder">📷 Aucune photo</div>
-    </div>
     <div class="card-actions">
-      <button class="btn-primary">Marquer comme ramassé</button>
-      <button class="btn-secondary danger">Supprimer</button>
+      <button class="btn-secondary danger" type="button">Supprimer</button>
     </div>
   `;
 
-  // actions
-  const badge = card.querySelector(".badge");
-  card.querySelector(".btn-primary").onclick = () => {
-    badge.textContent = "Ramassé ✅";
-    badge.classList.replace("pending", "done");
-  };
-  card.querySelector(".btn-secondary").onclick = () => card.remove();
-
-  // photo
-  const file = photoInput.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      card.querySelector(".report-photo").innerHTML =
-        `<img class="photo" src="${reader.result}">`;
-    };
-    reader.readAsDataURL(file);
-  }
-
   list.prepend(card);
+  enableDelete(card);
 
   form.reset();
-  previewEl.innerHTML = "";
   coordsEl.textContent = "Coordonnées : non définies";
   if (marker) marker.remove();
   marker = null;
   currentCoords = null;
 });
 </script>
+
 </body>
 </html>
