@@ -81,24 +81,19 @@
 
   <div class="features" id="reportList">
 
-    <!-- Exemples -->
+    <!-- Exemple -->
     <div class="card report">
       <div class="report-top">
         <h3>Pneu + ferraille</h3>
         <span class="badge pending">En attente</span>
       </div>
-      <p class="report-desc">Déchets coincés entre les rochers.</p>
-      <div class="card-actions">
-        <button class="btn-secondary danger" type="button">Supprimer</button>
-      </div>
-    </div>
 
-    <div class="card report">
-      <div class="report-top">
-        <h3>Filet de pêche</h3>
-        <span class="badge pending">En attente</span>
+      <p class="report-desc">Déchets coincés entre les rochers.</p>
+
+      <div class="report-photo">
+        <div class="photo-placeholder">📷 Aucune photo</div>
       </div>
-      <p class="report-desc">Filet lourd, extraction compliquée.</p>
+
       <div class="card-actions">
         <button class="btn-secondary danger" type="button">Supprimer</button>
       </div>
@@ -142,7 +137,6 @@ function enableDelete(card) {
   const btn = card.querySelector(".btn-secondary.danger");
   if (btn) btn.onclick = () => card.remove();
 }
-
 document.querySelectorAll(".card.report").forEach(enableDelete);
 
 /* ======================
@@ -160,6 +154,7 @@ form.addEventListener("submit", e => {
 
   const type = document.getElementById("type").value;
   const desc = document.getElementById("desc").value;
+  const file = document.getElementById("photo").files[0];
 
   const card = document.createElement("div");
   card.className = "card report";
@@ -169,10 +164,23 @@ form.addEventListener("submit", e => {
       <span class="badge pending">En attente</span>
     </div>
     <p class="report-desc">${desc}</p>
+    <div class="report-photo">
+      <div class="photo-placeholder">📷 Aucune photo</div>
+    </div>
     <div class="card-actions">
       <button class="btn-secondary danger" type="button">Supprimer</button>
     </div>
   `;
+
+  // photo
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      card.querySelector(".report-photo").innerHTML =
+        `<img class="photo" src="${reader.result}" alt="Photo du déchet">`;
+    };
+    reader.readAsDataURL(file);
+  }
 
   list.prepend(card);
   enableDelete(card);
