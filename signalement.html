@@ -117,35 +117,66 @@
 
   <section id="liste">
     <h2 style="text-align:center; margin-bottom: 2rem;">Signalements</h2>
-
+  
+    <!-- Conteneur qui recevra les cards (et sert au JS) -->
     <div class="features" id="reportList">
-      <!-- Exemple -->
-      <div class="card" style="text-align:left;">
-        <h3>Pneu + ferraille</h3>
-        <p><strong>Statut :</strong> En attente</p>
-        <p><strong>Localisation :</strong> Plouzané</p>
-        <p style="margin-top: 0.8rem; opacity:0.9;">
+  
+      <div class="card report">
+        <div class="report-top">
+          <h3 class="report-title">Pneu + ferraille</h3>
+          <span class="badge pending">En attente</span>
+        </div>
+  
+        <div class="meta">
+          <span class="chip">📍 Plouzané</span>
+          <span class="chip subtle">🗓️ Signalé aujourd’hui</span>
+        </div>
+  
+        <p class="report-desc">
           Déchets coincés entre les rochers, accès limité à marée basse.
         </p>
+  
+        <div class="report-photo">
+          <div class="photo-placeholder">
+            <span>📷</span>
+            <small>Aucune photo</small>
+          </div>
+        </div>
+  
         <div class="card-actions">
           <button class="btn-primary" type="button">Marquer comme ramassé</button>
           <button class="btn-secondary danger" type="button">Supprimer</button>
         </div>
       </div>
-
-      <div class="card" style="text-align:left;">
-        <h3>Déchet humain</h3>
-        <p><strong>Statut :</strong> Cuit complet</p>
-        <p><strong>Localisation :</strong> Bukit Bintang</p>
-        <p style="margin-top: 0.8rem; opacity:0.9;">
+  
+      <div class="card report">
+        <div class="report-top">
+          <h3 class="report-title">Déchet humain</h3>
+          <span class="badge done">Cuit complet</span>
+        </div>
+  
+        <div class="meta">
+          <span class="chip">📍 Bukit Bintang</span>
+          <span class="chip subtle">🗓️ Signalé hier</span>
+        </div>
+  
+        <p class="report-desc">
           Fin de dry january pour Baptiste.
         </p>
+  
+        <div class="report-photo">
+          <div class="photo-placeholder">
+            <span>📷</span>
+            <small>Aucune photo</small>
+          </div>
+        </div>
+  
         <div class="card-actions">
           <button class="btn-primary" type="button">Marquer comme ramassé</button>
           <button class="btn-secondary danger" type="button">Supprimer</button>
         </div>
       </div>
-      
+  
     </div>
   </section>
 
