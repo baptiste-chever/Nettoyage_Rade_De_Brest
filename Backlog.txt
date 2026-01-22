@@ -67,7 +67,7 @@ afin de localiser précisément la zone à nettoyer.
 
 US7
 En tant qu’ambassadeur bénévole,
-je veux choisir une date et une heure pour la collecte,
+je veux choisir une date, une heure et un lieu pour la collecte,
 afin d’organiser l’événement.
 
 US8
@@ -90,7 +90,7 @@ En tant qu’habitant local,
 je veux ajouter des photos à un signalement,
 afin de mieux décrire la situation.
 
-US11
+US11 (on s'en fiche)
 En tant qu’utilisateur,
 je veux voir un message expliquant pourquoi certains ramassages sont complexes,
 afin de comprendre les contraintes environnementales ou logistiques.
