@@ -48,17 +48,17 @@
   
 
   <main>
-    <div id="map" aria-label="Carte des ramassages"></div>
-    <div id="info-section"></div>
+    <div id="map-container">
+      <div id="map" aria-label="Carte des ramassages"></div>
+      <div id="info-section"></div>
+    </div>
   </main>
 
   <footer>
     <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
   </footer>
 
-  <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <script>
     const map = L.map("map").setView([48.3904, -4.4861], 11);
 
@@ -68,26 +68,25 @@
     }).addTo(map);
 
     const infoSection = document.getElementById('info-section');
+    let tempMarker = null;
 
     // Ramassages existants
     const ramassages = [
-      { lieu: "Plage du Moulin Blanc", date: "22/01/2026", heure: "10:00", nb: "27", lat: 48.387, lng: -4.418 },
-      { lieu: "Plage de Sainte-Anne", date: "25/01/2026", heure: "14:00", nb: "18", lat: 48.356, lng: -4.558 }
+      { lieu: "Plage du Moulin Blanc", date: "22/01/2026", heure: "10:00", lat: 48.387, lng: -4.418 },
+      { lieu: "Plage de Sainte-Anne", date: "25/01/2026", heure: "14:00", lat: 48.356, lng: -4.558 }
     ];
 
-    // Création des markers pour les ramassages existants
+    // Création des markers existants
     ramassages.forEach(r => {
       const marker = L.marker([r.lat, r.lng]).addTo(map);
-      marker.bindPopup(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>Nombre d'inscrits : ${r.nb}`);
+      marker.bindPopup(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}`);
 
       marker.on('click', () => {
-        // Affiche le détail sous la carte
         infoSection.innerHTML = `
           <div class="card">
             <h3>${r.lieu}</h3>
             <p><strong>Date :</strong> ${r.date}</p>
             <p><strong>Heure :</strong> ${r.heure}</p>
-            <p><strong>Nombre d'inscrits:</strong> ${r.nb}</p>
             <button id="inscrire-btn">S'inscrire au ramassage</button>
           </div>
         `;
@@ -102,11 +101,22 @@
       const lat = e.latlng.lat.toFixed(5);
       const lng = e.latlng.lng.toFixed(5);
 
-      // Vérifier si le clic est sur un marker existant (on sort si c'est le cas)
       const existing = ramassages.find(r => Math.abs(r.lat - lat) < 0.0001 && Math.abs(r.lng - lng) < 0.0001);
       if (existing) return;
 
-      // Affiche le formulaire sous la carte
+      // Supprimer l'ancien marker temporaire
+      if (tempMarker) map.removeLayer(tempMarker);
+
+      // Marker rouge temporaire
+      tempMarker = L.marker([lat, lng], {
+        icon: L.icon({
+          iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+          iconSize: [32,32],
+          iconAnchor: [16,32]
+        })
+      }).addTo(map);
+
+      // Formulaire à droite
       infoSection.innerHTML = `
         <div class="card">
           <h3>Créer un nouveau ramassage</h3>
@@ -114,6 +124,7 @@
             <label>Nom du lieu<input type="text" id="lieu" required /></label>
             <label>Date<input type="date" id="date" required /></label>
             <label>Heure<input type="time" id="heure" required /></label>
+            <p>Latitude : ${lat}, Longitude : ${lng}</p>
             <button type="submit">Enregistrer le ramassage</button>
           </form>
         </div>
@@ -131,13 +142,14 @@
           return;
         }
 
-        // Ajouter le nouveau ramassage sur la carte
+        // Ajouter sur la carte
         const marker = L.marker([lat, lng]).addTo(map)
           .bindPopup(`<strong>${lieu}</strong><br>Date : ${date}<br>Heure : ${heure}`);
         ramassages.push({ lieu, date, heure, lat, lng });
 
         alert("Nouveau ramassage créé !");
-        infoSection.innerHTML = ''; // cache le formulaire
+        infoSection.innerHTML = '';
+        if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
       });
     });
   </script>
