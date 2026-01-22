@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Création d’un ramassage</title>
+</head>
+<body>
+
+  <main>
+    <h1>Créer une collecte de déchets</h1>
+
+    <p>
+      Organisez un ramassage de déchets sur une plage ou une zone du littoral
+      afin de mobiliser des bénévoles.
+    </p>
+
+    <form action="#" method="post">
+
+      <!-- Lieu -->
+      <div>
+        <label for="lieu">Lieu / Plage</label><br>
+        <input
+          type="text"
+          id="lieu"
+          name="lieu"
+          placeholder="Ex : Plage de Sainte-Anne"
+          required
+        >
+      </div>
+
+      <br>
+
+      <!-- Date -->
+      <div>
+        <label for="date">Date du ramassage</label><br>
+        <input
+          type="date"
+          id="date"
+          name="date"
+          required
+        >
+      </div>
+
+      <br>
+
+      <!-- Heure -->
+      <div>
+        <label for="heure">Heure de début</label><br>
+        <input
+          type="time"
+          id="heure"
+          name="heure"
+          required
+        >
+      </div>
+
+      <br>
+
+      <!-- Description -->
+      <div>
+        <label for="description">Description</label><br>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          placeholder="Informations utiles, point de rendez-vous, matériel conseillé..."
+        ></textarea>
+      </div>
+
+      <br>
+
+      <!-- Nombre de bénévoles -->
+      <div>
+        <label for="benevoles">Nombre de bénévoles souhaité</label><br>
+        <input
+          type="number"
+          id="benevoles"
+          name="benevoles"
+          min="1"
+          placeholder="Ex : 15"
+        >
+      </div>
+
+      <br>
+
+      <!-- Bouton -->
+      <button type="submit">
+        Créer la collecte
+      </button>
+
+    </form>
+  </main>
+
+</body>
+</html>

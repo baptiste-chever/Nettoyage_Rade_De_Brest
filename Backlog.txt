@@ -1,0 +1,21 @@
+-Backlog-
+
+Header:
+- Arborescence du site  
+
+Onglet d’accueil : 
+- Présentation de l’organisation
+- Possibilité de créer un ramassage
+- Actualité
+- Statistiques de ramassage et impacte écologique
+
+Création d’une collecte : 
+- Créer une collecte sur une carte
+- Choisir date et heure
+- Possibilité d’inscription pour les bénévoles
+
+Onglet signalement : 
+- Possibilité de déclarer des objets encombrants sur une carte
+- Ajout de photos
+- Message qui explique pourquoi le ramassage est complexe
+- Possibilité pour les bénévoles de supprimer la demande si ça a été ramassé
