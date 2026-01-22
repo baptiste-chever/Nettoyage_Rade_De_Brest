@@ -63,7 +63,7 @@ html {
 #impact-collectif {
     /* Cette valeur définit l'espace "de sécurité" au-dessus de la section lors du défilement */
     scroll-margin-top: 100px; 
-    background-color: #F1F9F1;
+    background-color: white
 }
 
 .btn-secondary:hover {
@@ -72,6 +72,7 @@ html {
 
 section {
     padding: 4rem 2rem;
+    border-radius: 20px;
     max-width: 1100px;
     margin: auto;
 }
@@ -80,7 +81,8 @@ section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
-    background-color: #F1F9F1;
+    background-color: white;
+    border-radius: 20px;
 }
 
 .card {
@@ -224,8 +226,9 @@ footer p {
 
 .agenda-container {
     padding: 80px 10%;
-    background-color: #F1F9F1;
+    background-color: white;
     text-align: center;
+    border-radius: 20px;
 }
 /* --- Report card --- */
 .report{
@@ -391,7 +394,7 @@ footer p {
 
 .goal-container {
     padding: 0px 10%;
-    background-color: #F1F9F1;
+    background-color: white;
     text-align: center;
     border-radius: 20px;
     margin: 10px 10%;
@@ -505,12 +508,14 @@ footer p {
 }
 
 .nos-features {
-    background-color: #F1F9F1;
+    background-color: white;
+    border-radius: 20px;
 }
 .about-engineering {
     padding: 50px 10%;
-    background-color: #F1F9F1;
+    background-color: white;
     color: #334155;
+    border-radius: 20px;
 }
 
 .container {
@@ -621,7 +626,8 @@ footer p {
 .notre-mission {
     padding: 40px 10%;
     text-align: center;
-    background-color: #F1F9F1;
+    background-color: white;
+    border-radius: 20px;
 }
 
 .mission-intro h2 {
