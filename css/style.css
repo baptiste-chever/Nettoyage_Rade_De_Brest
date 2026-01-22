@@ -136,6 +136,13 @@ footer p {
   justify-content: space-between;
   gap: 1rem;
 }
+.accueil-nav {
+    display: flex; /* Active le mode Flexbox */
+    justify-content: flex-end; /* Aligne le contenu à droite */
+    gap: 20px; /* Ajoute un espace entre chaque lien */
+    padding-right: 25px; /* Optionnel : pour ne pas coller au bord */
+    padding-bottom: 25px; /* Optionnel : pour ne pas coller au bord */
+}
 .brand{
   color: white;
   text-decoration: none;
@@ -212,4 +219,121 @@ footer p {
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
+.agenda-container {
+    padding: 80px 10%;
+    background-color: #ffffff;
+    text-align: center;
+}
 
+.section-header h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.agenda-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: 40px auto 0;
+}
+
+.event-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.event-card:hover {
+    border-color: #569197;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.event-date {
+    background: #569197;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.event-date span { display: block; font-size: 0.8em; }
+
+.event-info { text-align: left; flex: 1; margin: 0 30px; }
+
+.btn-event {
+    background: transparent;
+    border: 2px solid #569197;
+    color: #569197;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-event:hover {
+    background: #569197;
+    color: white;
+}
+
+.goal-container {
+    padding: 60px 10%;
+    background-color: #f0f7f8;
+    text-align: center;
+    border-radius: 20px;
+    margin: 40px 10%;
+}
+
+.goal-header h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.progress-wrapper {
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #569197;
+}
+
+/* Fond de la barre */
+.progress-bar-bg {
+    background-color: #e0e0e0;
+    height: 30px;
+    border-radius: 15px;
+    overflow: hidden; /* Pour que le remplissage ne dépasse pas des arrondis */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Remplissage de la barre */
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #569197, #84b8be);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: width 1.5s ease-in-out; /* Animation au chargement */
+}
+
+.goal-footer {
+    margin-top: 20px;
+    font-style: italic;
+    color: #666;
+}
