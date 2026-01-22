@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zéro Déchets en Rade</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1e88e5;
+      --secondary: #43a047;
+      --light: #f5f7fa;
+      --dark: #1f2933;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+    }
+
+    header {
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .cta-buttons {
+      margin-top: 2rem;
+    }
+
+    .cta-buttons a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.8rem 1.6rem;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: white;
+      color: var(--primary);
+    }
+
+    .btn-secondary {
+      border: 2px solid white;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #e3f2fd;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .card h3 {
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .impact {
+      background-color: white;
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .impact-numbers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .impact-numbers div {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    footer {
+      background-color: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 4rem;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <header>
+    <h1>Zéro Déchets en Rade</h1>
+    <p>Rejoignez la communauté citoyenne qui agit pour un littoral propre et préservé, de Brest à Plougastel-Daoulas.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn-primary">Voir les actions</a>
+      <a href="#" class="btn-secondary">Organiser un ramassage</a>
+    </div>
+  </header>
+
+  <!-- FEATURES -->
+  <section>
+    <h2 style="text-align:center; margin-bottom:3rem;">Comment ça fonctionne ?</h2>
+    <div class="features">
+      <div class="card">
+        <h3>📍 Actions locales</h3>
+        <p>Découvrez les actions de ramassage près de chez vous sur tout le littoral de la rade.</p>
+      </div>
+      <div class="card">
+        <h3>🤝 Communauté</h3>
+        <p>Rejoignez des bénévoles engagés et participez à des actions collectives.</p>
+      </div>
+      <div class="card">
+        <h3>🌱 Impact réel</h3>
+        <p>Suivez l’impact environnemental des actions : déchets collectés, zones nettoyées.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMPACT -->
+  <section>
+    <div class="impact">
+      <h2>Notre impact collectif</h2>
+      <div class="impact-numbers">
+        <div>+120<br><span style="font-size:1rem; font-weight:400;">Actions</span></div>
+        <div>+950<br><span style="font-size:1rem; font-weight:400;">Bénévoles</span></div>
+        <div>+4,2T<br><span style="font-size:1rem; font-weight:400;">Déchets collectés</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 – Zéro Déchets en Rade · Projet étudiant Agile M2 ISEN</p>
+  </footer>
+
+</body>
+</html>
