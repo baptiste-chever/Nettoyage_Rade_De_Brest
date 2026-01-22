@@ -19,42 +19,45 @@
   />
   <link rel="stylesheet" href="css/style.css">
   <style>
-    main { padding:1rem 2rem; }
-    footer { text-align:center; padding:1rem; background:#f5f5f5; margin-top:2rem; }
+    
 
-    #map-container {
-      display: flex;
-      gap: 1rem;
+    main { padding:1.5rem 2rem; }
+
+    /* Grille principale */
+    .grid {
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap:1.5rem;
     }
+
+    .intro { grid-column:1 / 2; }
+    .photo { grid-column:2 / 3; }
+    .map { grid-column:1 / 2; }
+    .panel { grid-column:2 / 3; }
 
     #map {
-      height: 500px;
-      flex: 2;
-      border: 1px solid #ccc;
+      height:450px;
+      border:1px solid #ccc;
     }
 
-    #info-section {
-      flex: 1;
-      max-width: 400px;
+    img {
+      width:100%;
+      max-height:250px;
+      object-fit:cover;
+      border-radius:6px;
     }
 
     .card {
       background:#f5f5f5;
       padding:1rem;
-      border-radius:5px;
-    }
-
-    .photo-preview img {
-      width:100%;
-      border-radius:5px;
-      object-fit:cover;
-      max-height:350px;
+      border-radius:6px;
     }
 
     form {
       display:flex;
       flex-direction:column;
-      gap:1rem;
+      gap:1.2rem;
       margin-top:1rem;
     }
 
@@ -66,8 +69,8 @@
 
     input {
       padding:0.5rem;
-      margin-top:0.3rem;
       font-size:1rem;
+      margin-top:0.3rem;
     }
 
     button {
@@ -77,7 +80,6 @@
       border:none;
       border-radius:5px;
       cursor:pointer;
-      font-size:1rem;
     }
 
     .inscrits {
@@ -89,28 +91,52 @@
 </head>
 
 <body>
-  <header>
-    <div class="nav">
-      <a class="brand" href="index.html">Zéro Déchets en Rade</a>
-      <nav class="nav-links" aria-label="Navigation principale">
-        <a href="index.html">Accueil</a>
-        <a class="active" href="ramassage.html">Collecte</a>
-        <a href="signalement.html">Signalement</a>
-      </nav>
+
+<header>
+  <div class="nav">
+    <a class="brand" href="index.html">Zéro Déchets en Rade</a>
+    <nav class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a class="active" href="ramassage.html">Collecte</a>
+      <a href="signalement.html">Signalement</a>
+    </nav>
+  </div>
+  <h1>Collecte de déchets</h1>
+</header>
+
+<main>
+  <div class="grid">
+
+    <!-- Texte -->
+    <div class="intro">
+      <h2>
+        Participez aux actions de ramassage de déchets sur le littoral.
+        Consultez les collectes existantes, inscrivez-vous en un clic
+        ou proposez un nouveau ramassage directement sur la carte.
+      </h2>
+      <br>
+      <p> Cliquez sur la carte pour créer un ramassage ou inscrivez vous sur un existant en cliquant sur un point déjà créé.</p>
     </div>
-    <h1>Ramassages de déchets prévus</h1>
-    <p>Consultez les ramassages programmés sur le littoral. Survolez un point pour voir les informations. Cliquez sur la carte pour créer un nouveau ramassage.</p>
-  </header>
 
-  <main>
-  <div id="map-container">
-    <div id="map"></div>
+    <!-- Photo -->
+    <div class="photo">
+      <img src="figures/equipe_soudee.png" alt="Déchets sur le littoral">
+    </div>
+    <br>
+    <br>
+    <!-- Carte -->
+    <div class="map">
+      <div id="map"></div>
+    </div>
 
-    <div id="info-section">
-      <div class="photo-preview">
-        <img src="figures/sacs_plastiques.jpg" alt="Déchets sur la plage">
+    <!-- Panneau droit -->
+    <div class="panel" id="info-section">
+      <div class="card">
+        <h2>Créer un ramassage</h2>
+        <p>Cliquez sur la carte pour choisir un emplacement.</p>
       </div>
     </div>
+
   </div>
 </main>
 
@@ -118,31 +144,17 @@
   <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
 </footer>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
   const map = L.map("map").setView([48.3904, -4.4861], 11);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
-  }).addTo(map);
-
-  const infoSection = document.getElementById("info-section");
+  const info = document.getElementById("info-section");
   let tempMarker = null;
 
-  function showPhoto() {
-    infoSection.innerHTML = `
-      <div class="photo-preview">
-        <img src="figures/sacs_plastiques.jpg" alt="Déchets sur la plage">
-      </div>
-    `;
-  }
-
   function inscritsText(r) {
-    return r.inscrits.length
-      ? `${r.inscrits.length} inscrit(s)`
-      : "Aucun inscrit";
+    return r.inscrits.length ? `${r.inscrits.length} inscrit(s)` : "Aucun inscrit";
   }
 
   const ramassages = [
@@ -151,22 +163,20 @@
   ];
 
   ramassages.forEach(r => {
-    const marker = L.marker([r.lat, r.lng]).addTo(map);
-    marker.bindPopup(
-      `<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>${inscritsText(r)}`
-    );
+    const marker = L.marker([r.lat, r.lng]).addTo(map)
+      .bindPopup(`<strong>${r.lieu}</strong><br>${r.date} – ${r.heure}<br>${inscritsText(r)}`);
 
     marker.on("click", () => {
-      if (tempMarker) { map.removeLayer(tempMarker); tempMarker = null; }
+      if (tempMarker) map.removeLayer(tempMarker);
 
-      infoSection.innerHTML = `
+      info.innerHTML = `
         <div class="card">
           <h3>${r.lieu}</h3>
           <p><strong>Date :</strong> ${r.date}</p>
           <p><strong>Heure :</strong> ${r.heure}</p>
           <p class="inscrits">${inscritsText(r)}</p>
 
-          <form id="inscription-form">
+          <form id="inscription">
             <label>Votre nom
               <input type="text" id="nom" required>
             </label>
@@ -175,13 +185,10 @@
         </div>
       `;
 
-      document.getElementById("inscription-form").addEventListener("submit", e => {
+      document.getElementById("inscription").addEventListener("submit", e => {
         e.preventDefault();
         r.inscrits.push(document.getElementById("nom").value);
         alert("Merci ! Votre inscription est validée !");
-        marker.setPopupContent(
-          `<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}<br>${inscritsText(r)}`
-        );
         marker.fire("click");
       });
     });
@@ -201,41 +208,17 @@
       })
     }).addTo(map);
 
-    infoSection.innerHTML = `
+    info.innerHTML = `
       <div class="card">
         <h3>Créer un ramassage</h3>
-        <form id="new-form">
-          <label>Nom du lieu
-            <input type="text" id="lieu" required>
-          </label>
-          <label>Date
-            <input type="date" id="date" required>
-          </label>
-          <label>Heure
-            <input type="time" id="heure" required>
-          </label>
+        <form id="create">
+          <label>Lieu<input id="lieu" required></label>
+          <label>Date<input type="date" id="date" required></label>
+          <label>Heure<input type="time" id="heure" required></label>
           <button>Créer</button>
         </form>
       </div>
     `;
-
-    document.getElementById("new-form").addEventListener("submit", e => {
-      e.preventDefault();
-
-      const lieu = document.getElementById("lieu").value;
-      const date = document.getElementById("date").value;
-      const heure = document.getElementById("heure").value;
-
-      ramassages.push({ lieu, date, heure, lat, lng, inscrits:[] });
-
-      L.marker([lat, lng]).addTo(map)
-        .bindPopup(`<strong>${lieu}</strong><br>Date : ${date}<br>Heure : ${heure}<br>Aucun inscrit`);
-
-      alert("Ramassage créé !");
-      map.removeLayer(tempMarker);
-      tempMarker = null;
-      showPhoto();
-    });
   });
 </script>
 
