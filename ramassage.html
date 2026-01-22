@@ -46,31 +46,28 @@
   </header>
 
   
+
   <main>
     <div id="map" aria-label="Carte des ramassages"></div>
+    <div id="info-section"></div>
   </main>
 
   <footer style="text-align:center; padding:1rem; background:#f5f5f5; margin-top:2rem;">
-    <p>© Zéro Déchets en Rade — Projet étudiant (ISEN) · Ramassages</p>
+    <p>© Zéro Déchets en Rade — Projet étudiant (ISEN)</p>
   </footer>
 
   <!-- Leaflet JS -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""
-  ></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    // ----------------------------
-    // Carte Leaflet
-    // ----------------------------
-    const map = L.map("map").setView([48.3904, -4.4861], 11); // Rade de Brest
+    const map = L.map("map").setView([48.3904, -4.4861], 11);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "© OpenStreetMap",
       maxZoom: 19
     }).addTo(map);
+
+    const infoSection = document.getElementById('info-section');
 
     // Ramassages existants
     const ramassages = [
@@ -78,21 +75,69 @@
       { lieu: "Plage de Sainte-Anne", date: "25/01/2026", heure: "14:00", lat: 48.356, lng: -4.558 }
     ];
 
+    // Création des markers pour les ramassages existants
     ramassages.forEach(r => {
       const marker = L.marker([r.lat, r.lng]).addTo(map);
       marker.bindPopup(`<strong>${r.lieu}</strong><br>Date : ${r.date}<br>Heure : ${r.heure}`);
+
+      marker.on('click', () => {
+        // Affiche le détail sous la carte
+        infoSection.innerHTML = `
+          <div class="card">
+            <h3>${r.lieu}</h3>
+            <p><strong>Date :</strong> ${r.date}</p>
+            <p><strong>Heure :</strong> ${r.heure}</p>
+            <button id="inscrire-btn">S'inscrire au ramassage</button>
+          </div>
+        `;
+        document.getElementById('inscrire-btn').addEventListener('click', () => {
+          alert("Merci ! Votre inscription est validée !");
+        });
+      });
     });
 
-    // Ajouter un ramassage au clic
-    map.on("click", (e) => {
+    // Clique sur la carte pour créer un nouveau ramassage
+    map.on('click', (e) => {
       const lat = e.latlng.lat.toFixed(5);
       const lng = e.latlng.lng.toFixed(5);
-    
-      const confirmAdd = confirm(`Créer un ramassage à cet endroit ?\n\nLatitude : ${lat}\nLongitude : ${lng}`);
-      if (confirmAdd) {
-        // Redirige vers la page de création en passant lat/lng en query params
-        window.location.href = `creer-ramassage.html?lat=${lat}&lng=${lng}`;
-      }
+
+      // Vérifier si le clic est sur un marker existant (on sort si c'est le cas)
+      const existing = ramassages.find(r => Math.abs(r.lat - lat) < 0.0001 && Math.abs(r.lng - lng) < 0.0001);
+      if (existing) return;
+
+      // Affiche le formulaire sous la carte
+      infoSection.innerHTML = `
+        <div class="card">
+          <h3>Créer un nouveau ramassage</h3>
+          <form id="new-ramassage-form">
+            <label>Nom du lieu<input type="text" id="lieu" required /></label>
+            <label>Date<input type="date" id="date" required /></label>
+            <label>Heure<input type="time" id="heure" required /></label>
+            <button type="submit">Enregistrer le ramassage</button>
+          </form>
+        </div>
+      `;
+
+      const form = document.getElementById('new-ramassage-form');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const lieu = document.getElementById('lieu').value.trim();
+        const date = document.getElementById('date').value;
+        const heure = document.getElementById('heure').value;
+
+        if (!lieu || !date || !heure) {
+          alert("Veuillez remplir tous les champs.");
+          return;
+        }
+
+        // Ajouter le nouveau ramassage sur la carte
+        const marker = L.marker([lat, lng]).addTo(map)
+          .bindPopup(`<strong>${lieu}</strong><br>Date : ${date}<br>Heure : ${heure}`);
+        ramassages.push({ lieu, date, heure, lat, lng });
+
+        alert("Nouveau ramassage créé !");
+        infoSection.innerHTML = ''; // cache le formulaire
+      });
     });
   </script>
 </body>
