@@ -133,6 +133,10 @@
 const map = L.map("map").setView([48.39, -4.48], 12);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
+setTimeout(() => {
+  map.invalidateSize();
+}, 200);
+
 let marker = null;
 let currentCoords = null;
 const coordsEl = document.getElementById("coords");
@@ -245,3 +249,8 @@ form.addEventListener("submit", async (e) => {
 
 // Chargement initial (affiche ce qui est en DB)
 loadReports();
+
+</script>
+</body>
+</html>
+
