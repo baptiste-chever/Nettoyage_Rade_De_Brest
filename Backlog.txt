@@ -23,7 +23,6 @@ Onglet signalement :
 
 
 Backlog réparti en sprints
-Projet : Zero Déchets en Rade
 
 Sprint 1 – MVP : découverte et navigation
 Objectif du sprint : permettre aux utilisateurs de comprendre le projet et de découvrir les actions existantes.
