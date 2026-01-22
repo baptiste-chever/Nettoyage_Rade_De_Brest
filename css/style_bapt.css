@@ -440,3 +440,63 @@ footer p {
     font-style: italic;
     color: #666;
 }
+
+.past-actions {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.past-actions h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+}
+
+.collecte-row {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 80px;
+}
+
+/* L'astuce magique : inverse l'ordre pour les lignes paires (2, 4, 6...) */
+.collecte-row:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.collecte-text {
+    flex: 1;
+}
+
+.collecte-text h2 {
+    color: #569197;
+    margin-bottom: 10px;
+}
+
+.collecte-text .stats {
+    font-size: 1.2rem;
+    color: #2d3436;
+    margin-bottom: 15px;
+}
+
+.collecte-image {
+    flex: 1;
+}
+
+.collecte-image img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover; /* Recadre l'image proprement sans la déformer */
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Version Mobile : On remet tout en colonne */
+@media (max-width: 768px) {
+    .collecte-row, .collecte-row:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+    }
+}
