@@ -270,32 +270,87 @@
     });
   });
 
-  map.on("click", e => {
-    if (tempMarker) map.removeLayer(tempMarker);
+map.on("click", e => {
+  if (tempMarker) map.removeLayer(tempMarker);
 
-    const lat = e.latlng.lat;
-    const lng = e.latlng.lng;
+  const lat = e.latlng.lat;
+  const lng = e.latlng.lng;
 
-    tempMarker = L.marker([lat, lng], {
-      icon: L.icon({
-        iconUrl:"https://maps.google.com/mapfiles/ms/icons/red-dot.png",
-        iconSize:[32,32],
-        iconAnchor:[16,32]
-      })
-    }).addTo(map);
+  // Marker rouge temporaire
+  tempMarker = L.marker([lat, lng], {
+    icon: L.icon({
+      iconUrl:"https://maps.google.com/mapfiles/ms/icons/red-dot.png",
+      iconSize:[32,32],
+      iconAnchor:[16,32]
+    })
+  }).addTo(map);
 
-    info.innerHTML = `
-      <div class="card">
-        <h3>Créer un ramassage</h3>
-        <form id="create">
-          <label>Lieu<input id="lieu" required></label>
-          <label>Date<input type="date" id="date" required></label>
-          <label>Heure<input type="time" id="heure" required></label>
-          <button>Créer</button>
-        </form>
-      </div>
-    `;
+  info.innerHTML = `
+    <div class="card">
+      <h3>Créer un ramassage</h3>
+      <form id="create">
+        <label>Lieu<input id="lieu" required></label>
+        <label>Date<input type="date" id="date" required></label>
+        <label>Heure<input type="time" id="heure" required></label>
+        <button type="submit">Créer</button>
+      </form>
+    </div>
+  `;
+
+  document.getElementById("create").addEventListener("submit", e2 => {
+    e2.preventDefault();
+
+    const lieu = document.getElementById("lieu").value.trim();
+    const date = document.getElementById("date").value;
+    const heure = document.getElementById("heure").value;
+
+    if (!lieu || !date || !heure) return;
+
+    // 1️⃣ nouvel objet ramassage
+    const newRamassage = { lieu, date, heure, lat, lng, inscrits: [] };
+    ramassages.push(newRamassage);
+
+    // 2️⃣ marker définitif
+    const marker = L.marker([lat, lng]).addTo(map)
+      .bindPopup(`<strong>${lieu}</strong><br>${date} – ${heure}<br>Aucun inscrit`);
+
+    // 3️⃣ clic sur le nouveau marker
+    marker.on("click", () => {
+      info.innerHTML = `
+        <div class="card">
+          <h3>${lieu}</h3>
+          <p><strong>Date :</strong> ${date}</p>
+          <p><strong>Heure :</strong> ${heure}</p>
+          <p class="inscrits">${inscritsText(newRamassage)}</p>
+
+          <form id="inscription">
+            <label>Votre nom
+              <input type="text" id="nom" required>
+            </label>
+            <button>S'inscrire</button>
+          </form>
+        </div>
+      `;
+
+      document.getElementById("inscription").addEventListener("submit", e3 => {
+        e3.preventDefault();
+        newRamassage.inscrits.push(document.getElementById("nom").value);
+        alert("Merci ! Votre inscription est validée !");
+        marker.setPopupContent(
+          `<strong>${lieu}</strong><br>${date} – ${heure}<br>${inscritsText(newRamassage)}`
+        );
+        marker.fire("click");
+      });
+    });
+
+    // 4️⃣ nettoyage
+    map.removeLayer(tempMarker);
+    tempMarker = null;
+
+    alert("Ramassage créé !");
   });
+});
+
 </script>
 
 </body>
