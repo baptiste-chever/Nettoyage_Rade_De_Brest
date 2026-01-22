@@ -212,4 +212,107 @@ footer p {
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
+/* --- Report card --- */
+.report{
+  text-align: left;
+}
+
+.report-top{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+}
+
+.report-title{
+  margin: 0;
+  color: var(--dark);
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+/* Badges */
+.badge{
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  border: 1px solid rgba(31,41,51,0.12);
+}
+
+.badge.pending{
+  color: var(--primary);
+  background: rgba(30,136,229,0.10);
+}
+
+.badge.done{
+  color: var(--secondary);
+  background: rgba(67,160,71,0.12);
+}
+
+/* Meta chips */
+.meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+.chip{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(31,41,51,0.06);
+  border: 1px solid rgba(31,41,51,0.08);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.chip.subtle{
+  opacity: 0.8;
+}
+
+/* Description */
+.report-desc{
+  margin-top: 0.2rem;
+  opacity: 0.9;
+  line-height: 1.45;
+}
+
+/* Photo area */
+.report-photo{
+  margin-top: 0.9rem;
+}
+
+.photo-placeholder{
+  height: 180px;
+  border-radius: 14px;
+  border: 1px dashed rgba(31,41,51,0.20);
+  background: linear-gradient(180deg, #ffffff, #eef2f7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  color: rgba(31,41,51,0.75);
+}
+
+.photo-placeholder span{
+  font-size: 1.6rem;
+}
+
+.photo-placeholder small{
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+/* Actions: keep consistent width */
+.card-actions button{
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+}
 
