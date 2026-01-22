@@ -46,6 +46,7 @@
       <h3>Localisation</h3>
       <div id="map" class="leaflet-map"></div>
       <p id="coords" class="coords">Coordonnées : non définies</p>
+      <small style="opacity:.8;">Clique sur la carte pour choisir un point.</small>
     </div>
 
     <div class="card">
@@ -68,7 +69,10 @@
 
         <label>Photo (optionnel)
           <input type="file" id="photo" accept="image/*">
+          <small style="opacity:.8;">La photo est ajoutée à la card (local uniquement).</small>
         </label>
+
+        <div id="preview" style="margin-top:.8rem;"></div>
 
         <button class="btn-primary btn-block" type="submit">Publier</button>
       </form>
@@ -79,9 +83,9 @@
 <section id="liste">
   <h2 style="text-align:center; margin-bottom:2rem;">Signalements</h2>
 
+  <!-- On garde les exemples par défaut ici -->
   <div class="features" id="reportList">
 
-    <!-- Exemple -->
     <div class="card report">
       <div class="report-top">
         <h3>Pneu + ferraille</h3>
@@ -133,9 +137,8 @@
 const map = L.map("map").setView([48.39, -4.48], 12);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
 
-setTimeout(() => {
-  map.invalidateSize();
-}, 200);
+// évite bug de rendu si layout change
+setTimeout(() => map.invalidateSize(), 200);
 
 let marker = null;
 let currentCoords = null;
@@ -152,7 +155,7 @@ map.on("click", e => {
 });
 
 /* ======================
-   Suppression
+   Suppression (exemples + ajoutés)
 ====================== */
 function enableDelete(card) {
   const btn = card.querySelector(".btn-secondary.danger");
@@ -161,57 +164,31 @@ function enableDelete(card) {
 document.querySelectorAll(".card.report").forEach(enableDelete);
 
 /* ======================
-   Ajout signalement
+   Preview photo (form)
 ====================== */
-const API = "http://127.0.0.1:8000";
+const photoInput = document.getElementById("photo");
+const previewEl = document.getElementById("preview");
+
+photoInput.addEventListener("change", () => {
+  previewEl.innerHTML = "";
+  const file = photoInput.files?.[0];
+  if (!file) return;
+
+  const img = document.createElement("img");
+  img.className = "photo";
+  img.alt = "Prévisualisation";
+  const reader = new FileReader();
+  reader.onload = () => img.src = reader.result;
+  reader.readAsDataURL(file);
+  previewEl.appendChild(img);
+});
+
+/* ======================
+   Ajout signalement (local only)
+====================== */
 const list = document.getElementById("reportList");
 const form = document.getElementById("reportForm");
 
-function renderCard(r) {
-  const card = document.createElement("div");
-  card.className = "card report";
-
-  card.innerHTML = `
-    <div class="report-top">
-      <h3>${r.type}</h3>
-      <span class="badge pending">En attente</span>
-    </div>
-
-    <div class="meta">
-      <span class="chip">📍 ${Number(r.lat).toFixed(5)}, ${Number(r.lon).toFixed(5)}</span>
-      <span class="chip subtle">🗓️ Persistant</span>
-    </div>
-
-    <p class="report-desc">${r.description}</p>
-
-    <div class="report-photo">
-      ${r.photo_url
-        ? `<img class="photo" src="${API}${r.photo_url}" alt="Photo du déchet">`
-        : `<div class="photo-placeholder">📷 Aucune photo</div>`
-      }
-    </div>
-
-    <div class="card-actions">
-      <button class="btn-secondary danger" type="button">Supprimer</button>
-    </div>
-  `;
-
-  card.querySelector(".btn-secondary.danger").onclick = async () => {
-    await fetch(`${API}/reports/${r.id}`, { method: "DELETE" });
-    await loadReports();
-  };
-
-  return card;
-}
-
-async function loadReports() {
-  const res = await fetch(`${API}/reports`);
-  const reports = await res.json();
-  list.innerHTML = "";
-  reports.forEach(r => list.appendChild(renderCard(r)));
-}
-
-// Submit -> POST /reports (FormData)
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -221,36 +198,62 @@ form.addEventListener("submit", async (e) => {
   }
 
   const type = document.getElementById("type").value;
-  const desc = document.getElementById("desc").value;
-  const file = document.getElementById("photo").files[0];
+  const desc = document.getElementById("desc").value.trim();
+  const file = photoInput.files?.[0];
 
-  const fd = new FormData();
-  fd.append("type", type);
-  fd.append("description", desc);
-  fd.append("lat", currentCoords.lat);
-  fd.append("lon", currentCoords.lon);
-  if (file) fd.append("photo", file);
+  // nouvelle card
+  const card = document.createElement("div");
+  card.className = "card report";
 
-  const res = await fetch(`${API}/reports`, { method: "POST", body: fd });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    alert(err.detail || "Erreur upload");
-    return;
+  card.innerHTML = `
+    <div class="report-top">
+      <h3>${type}</h3>
+      <span class="badge pending">En attente</span>
+    </div>
+
+    <div class="meta">
+      <span class="chip">📍 ${currentCoords.lat}, ${currentCoords.lon}</span>
+      <span class="chip subtle">🗓️ À l’instant</span>
+    </div>
+
+    <p class="report-desc"></p>
+
+    <div class="report-photo">
+      <div class="photo-placeholder">📷 Aucune photo</div>
+    </div>
+
+    <div class="card-actions">
+      <button class="btn-secondary danger" type="button">Supprimer</button>
+    </div>
+  `;
+
+  card.querySelector(".report-desc").textContent = desc;
+
+  // photo si fournie (local)
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      card.querySelector(".report-photo").innerHTML =
+        `<img class="photo" src="${reader.result}" alt="Photo du déchet">`;
+    };
+    reader.readAsDataURL(file);
   }
 
+  // delete
+  enableDelete(card);
+
+  // ajoute en haut (au-dessus des exemples)
+  list.prepend(card);
+
+  // reset form + coords
   form.reset();
+  previewEl.innerHTML = "";
   coordsEl.textContent = "Coordonnées : non définies";
   if (marker) marker.remove();
   marker = null;
   currentCoords = null;
-
-  await loadReports();
 });
-
-// Chargement initial (affiche ce qui est en DB)
-loadReports();
-
 </script>
+
 </body>
 </html>
-
