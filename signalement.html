@@ -69,15 +69,13 @@
         <h3>1) Localisation sur la carte</h3>
         <p>Sélectionnez un point (ou renseignez une adresse). Une carte interactive pourra être ajoutée ensuite.</p>
 
-        <div id="map" class="map-placeholder" role="img" aria-label="Carte de signalement (placeholder)">
-          <div class="map-pin" aria-hidden="true">📍</div>
-          <p style="margin-top: 0.8rem;">
-            Cliquez pour placer un signalement (démo) — coordonnées simulées.
-          </p>
-          <p id="coords" style="opacity:0.8; margin-top: 0.5rem;">
+        <div id="map" class="leaflet-map" aria-label="Carte de signalement"></div>
+          <p id="coords" style="opacity:0.8; margin-top: 0.6rem;">
             Coordonnées : non définies
           </p>
-        </div>
+          <small style="opacity:0.8;">
+            Astuce : clique sur la carte pour placer un marqueur.
+          </small>
       </div>
 
       <!-- Formulaire -->
