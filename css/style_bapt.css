@@ -63,6 +63,7 @@ html {
 #impact-collectif {
     /* Cette valeur définit l'espace "de sécurité" au-dessus de la section lors du défilement */
     scroll-margin-top: 100px; 
+    background-color: #F1F9F1;
 }
 
 .btn-secondary:hover {
@@ -79,6 +80,7 @@ section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
+    background-color: #F1F9F1;
 }
 
 .card {
@@ -106,7 +108,7 @@ section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 2rem;
-    margin-top: 2rem;
+    margin-top: 0px;
 }
 
 .impact-numbers div {
@@ -222,7 +224,7 @@ footer p {
 
 .agenda-container {
     padding: 80px 10%;
-    background-color: #ffffff;
+    background-color: #F1F9F1;
     text-align: center;
 }
 /* --- Report card --- */
@@ -340,7 +342,7 @@ footer p {
     flex-direction: column;
     gap: 20px;
     max-width: 800px;
-    margin: 40px auto 0;
+    margin: 2px auto 0;
 }
 
 .event-card {
@@ -389,7 +391,7 @@ footer p {
 
 .goal-container {
     padding: 0px 10%;
-    background-color: #f0f7f8;
+    background-color: #F1F9F1;
     text-align: center;
     border-radius: 20px;
     margin: 10px 10%;
@@ -499,5 +501,184 @@ footer p {
     .collecte-row, .collecte-row:nth-child(even) {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+.nos-features {
+    background-color: #F1F9F1;
+}
+.about-engineering {
+    padding: 50px 10%;
+    background-color: #F1F9F1;
+    color: #334155;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.about-header h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+}
+
+.badge {
+    background: #569197;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.intro-text {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.content-box {
+    background: white;
+    padding: 35px;
+    border-radius: 12px;
+    border-left: 5px solid #569197;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.content-box h3 {
+    margin-bottom: 20px;
+    color: #1e293b;
+    font-size: 1.4rem;
+}
+
+.points-list {
+    list-style: none;
+    padding: 0;
+}
+
+.points-list li {
+    margin-bottom: 15px;
+    padding-left: 25px;
+    position: relative;
+}
+
+.points-list li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #569197;
+    font-weight: bold;
+}
+
+/* Grille des expertises */
+.expertise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.expert-item {
+    text-align: center;
+    padding: 15px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.expert-item:hover {
+    background: #569197;
+    color: white;
+}
+
+.expert-item i {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.expert-item span {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+@media (max-width: 850px) {
+    .about-grid { grid-template-columns: 1fr; }
+}
+
+.notre-mission {
+    padding: 40px 10%;
+    text-align: center;
+    background-color: #F1F9F1;
+}
+
+.mission-intro h2 {
+    color: #2c3e50;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.mission-intro p {
+    font-size: 1.1rem;
+    color: #5d6d7e;
+    max-width: 700px;
+    margin: 0 auto 50px;
+}
+
+.mission-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.mission-item {
+    background-color: #D7EDD7;
+    padding: 30px;
+    border-radius: 15px;
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.mission-item:hover {
+    transform: translateY(-5px);
+}
+
+.mission-item i {
+    font-size: 3rem;
+    color: #569197; /* Ta couleur principale */
+    margin-bottom: 20px;
+}
+
+.mission-item h4 {
+    font-size: 1.4rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.mission-item p {
+    color: #7f8c8d;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .mission-grid {
+        flex-direction: column;
+        align-items: center;
     }
 }
