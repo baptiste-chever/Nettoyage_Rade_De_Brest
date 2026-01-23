@@ -20,7 +20,12 @@ Onglet signalement :
 - Message qui explique pourquoi le ramassage est complexe
 - Possibilité pour les bénévoles de supprimer la demande si ça a été ramassé
 
-
+Personna : 
+Utilisateur : tous
+Rammaseur
+Ambassadeur
+Habitant
+Collectivité
 
 Backlog réparti en sprints
 
@@ -29,22 +34,22 @@ Objectif du sprint : permettre aux utilisateurs de comprendre le projet et de d�
 
 User stories réalisées :
 
-US1
+US1 priorité moyenne
 En tant qu’utilisateur,
 je veux accéder à une arborescence claire du site,
 afin de naviguer facilement entre les différentes fonctionnalités.
 
-US2
+US2 priorité élevée
 En tant qu’habitant local,
 je veux voir une présentation de l’organisation,
 afin de comprendre sa mission et ses objectifs.
 
-US4
+US4  Prioritié moyenne
 En tant qu’utilisateur,
 je veux consulter les actualités liées aux actions de ramassage,
 afin de rester informé des initiatives en cours.
-
-US5
+  
+US5 Priorité élevée
 En tant qu’utilisateur,
 je veux voir des statistiques de ramassage et d’impact écologique,
 afin de mesurer l’impact global des actions menées.
@@ -54,22 +59,22 @@ Objectif du sprint : permettre aux ambassadeurs de créer des actions et aux bé
 
 User stories réalisées :
 
-US3
+US3 Priorité élevée
 En tant qu’ambassadeur bénévole,
 je veux accéder rapidement à la création d’un ramassage depuis l’accueil,
 afin de lancer une action facilement.
 
-US6
+US6 Priorité élevée
 En tant qu’ambassadeur bénévole,
 je veux créer une collecte sur une carte,
 afin de localiser précisément la zone à nettoyer.
 
-US7
+US7 Priorité élevée
 En tant qu’ambassadeur bénévole,
 je veux choisir une date, une heure et un lieu pour la collecte,
 afin d’organiser l’événement.
 
-US8
+US8 Priorité élevée
 En tant que ramasseur bénévole,
 je veux m’inscrire à une collecte,
 afin de participer à une action de ramassage.
@@ -79,17 +84,17 @@ Objectif du sprint : permettre aux habitants de signaler des déchets et aux bé
 
 User stories réalisées :
 
-US9
+US9 Priorité élevée
 En tant qu’habitant local,
 je veux signaler des objets encombrants sur une carte,
 afin d’alerter la communauté d’un besoin de ramassage.
 
-US10
+US10 Priorité moyenne
 En tant qu’habitant local,
 je veux ajouter des photos à un signalement,
 afin de mieux décrire la situation.
 
-US11 
+US11  Priorité moyenne
 En tant que ramasseur bénévole,
 je veux signaler un objectdont le ramassage est trop complexe avec les moyens disponibles actuellement,
 afin de les prendre en charge ultérieurement.
@@ -99,12 +104,12 @@ Objectif du sprint : assurer le suivi des signalements et améliorer la lisibili
 
 User stories réalisées :
 
-US12
+US12 Priorité basse
 En tant qu’utilisateur,
 je veux consulter l’historique des collectes réalisées en allant dans la page "voir les actions",
 afin de visualiser les actions passées.
 
-US13
+US13 Priorité basse
 En tant qu’utilisateur,
 je veux voir une mise à jour des statistiques après chaque collecte,
 afin de suivre l’évolution de l’impact environnemental.
